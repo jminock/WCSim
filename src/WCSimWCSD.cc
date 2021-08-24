@@ -1,4 +1,6 @@
 #include "WCSimWCSD.hh"
+#include "WCSimTuningParameters.hh"
+#include "WCSimDetectorConstruction.hh"
 #include "G4ParticleTypes.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -82,6 +84,17 @@ G4bool WCSimWCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   // Determine from QE whether to reject the hit
   // ===========================================
   G4float ratio = 1.;
+  WCSimTuningParameters *tuning = (WCSimTuningParameters*) fdet->Get_TuningParams();
+  G4double QEratio = tuning->GetQERatio();
+  G4double QEratioWB = tuning->GetQERatioWB();
+  //G4cout <<"QERatio: "<<QEratio<<", QEratioWB: "<<QEratioWB<<G4endl;
+  //G4cout <<"volumeName: "<<volumeName<<G4endl;
+  if (volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081" || volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081HQE" || volumeName == "ANNIEp2v7-glassFaceWCPMT_D784KFLB"){
+    ratio = QEratioWB;
+  } else { 
+    ratio = QEratio;
+  } 
+  //G4cout <<"QEratio: "<<QEratio<<G4endl;
   G4float maxQE;
   G4float photonQE;
   if(isPMT){
@@ -89,14 +102,16 @@ G4bool WCSimWCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     if (fdet->GetPMT_QE_Method()==1){
       photonQE = 1.1;
     }else if (fdet->GetPMT_QE_Method()==2){
-      maxQE = fdet->GetPMTQE(volumeName,wavelength,0,240,660,ratio);
+      maxQE = fdet->GetPMTQE(volumeName,wavelength,0,240,660,QEratio);
       photonQE = fdet->GetPMTQE(volumeName, wavelength,1,240,660,ratio);
       photonQE = photonQE/maxQE;
     }else if (fdet->GetPMT_QE_Method()==3){
-      ratio = 1./(1.-0.25);
+      //ratio = 1./(1.-0.25);
+      //ratio = 1.;
       photonQE = fdet->GetPMTQE(volumeName, wavelength,1,240,660,ratio);
     }else if (fdet->GetPMT_QE_Method()==4){
-      maxQE = fdet->GetPMTQE(fdet->GetIDCollectionName(), wavelength,0,240,660,ratio);
+      //maxQE = fdet->GetPMTQE(fdet->GetIDCollectionName(), wavelength,0,240,660,ratio);
+      maxQE = fdet->GetPMTQE(fdet->GetIDCollectionName(), wavelength,0,240,660,QEratio);
       if(maxQE==0){
         G4cerr<<"MAXQE FOR PHOTON HIT ON VOLUME "<<volumeName<<" IS 0!!"<<G4endl;
         return false;
@@ -109,14 +124,13 @@ G4bool WCSimWCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     if (fdet->GetLAPPD_QE_Method()==1){
       photonQE = 1.1;
     }else if (fdet->GetLAPPD_QE_Method()==2){
-      maxQE = fdet->GetLAPPDQE(volumeName,wavelength,0,240,660,ratio);
+      maxQE = fdet->GetLAPPDQE(volumeName,wavelength,0,240,660,QEratio);
       photonQE = fdet->GetLAPPDQE(volumeName, wavelength,1,240,660,ratio);
       photonQE = photonQE/maxQE;
     }else if (fdet->GetLAPPD_QE_Method()==3){
-      ratio = 1./(1.-0.25);
       photonQE = fdet->GetLAPPDQE(volumeName, wavelength,1,240,660,ratio);
     }else if (fdet->GetLAPPD_QE_Method()==4){
-      maxQE = fdet->GetPMTQE(fdet->GetIDCollectionName(), wavelength,0,240,660,ratio);
+      maxQE = fdet->GetPMTQE(fdet->GetIDCollectionName(), wavelength,0,240,660,QEratio);
       if(maxQE==0){
         G4cerr<<"MAXQE FOR PHOTON HIT ON VOLUME "<<volumeName<<" IS 0!!"<<G4endl;
         return false;
