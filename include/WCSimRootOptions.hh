@@ -127,6 +127,7 @@ public:
   double GetRayff() {return Rayff;}
   double GetBsrff() {return Bsrff;}
   double GetAbwff() {return Abwff;}
+  double GetRgcff() {return Rgcff;}
   double GetRgcffR7081() {return RgcffR7081;}
   double GetMieff() {return Mieff;}
   double GetTeflonrff() {return Teflonrff;}
