@@ -18,6 +18,9 @@
 #Turning holders on (1) or off (0)
 /WCSim/tuning/holder 1
 
+#Turning PMT-wise Q.E. on (1) or off (0)
+ /WCSim/tuning/PMTwiseQE 1
+
 # Parameters to set up Top Veto - jl145
 # Set to "1" to turn on top veto.
 /WCSim/tuning/topveto 0

@@ -184,6 +184,7 @@ void WCSimRootOptions::Print(Option_t *) const
     << "\tHolder: " << Holder << endl
     << "\tQERatio: "<< QERatio << endl
     << "\tQERatioWB: "<< QERatioWB << endl
+    << "\tPMTWiseQE: " << PMTWiseQE << endl
     << "\tTvspacing: " << Tvspacing << endl
     << "\tTopveto: " << Topveto << endl
     << "Physics List Factory:" << endl

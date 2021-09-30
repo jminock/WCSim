@@ -52,6 +52,10 @@ public:
   G4double GetQERatioWB() {return QEratioWB;}
   void SetQERatioWB(G4double qeratiowb) {QEratioWB = qeratiowb;}
 
+  G4bool GetPMTwiseQE() {return PMTWiseQE;}
+  void SetPMTwiseQE(G4double pmtwiseqe) {PMTWiseQE = pmtwiseqe;}
+
+
   //For Top Veto - jl145
   G4double GetTVSpacing() {return tvspacing;}
   void SetTVSpacing(G4double tparam) {tvspacing=tparam;}
@@ -84,6 +88,7 @@ private:
   G4bool holder;        //Should ANNIE PMT holders be implemented in the simulation?
   G4double QEratio;	//Factor by which the PMT Q.E. can be scaled
   G4double QEratioWB;	//Factor by which the WB PMT Q.E. can be scaled
+  G4bool PMTWiseQE;	//Should each PMT have its own Q.E. scaling?
 
   //For Top Veto - jl145
   G4double tvspacing;

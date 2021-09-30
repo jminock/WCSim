@@ -42,6 +42,7 @@ private:
   G4UIcmdWithABool *Holder;
   G4UIcmdWithADouble* Qeratio;
   G4UIcmdWithADouble* QeratioWB;
+  G4UIcmdWithABool *PMTwiseQE;
 
   //For Top Veto - jl145
   G4UIcmdWithADouble* TVSpacing;

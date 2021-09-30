@@ -77,6 +77,11 @@ WCSimTuningMessenger::WCSimTuningMessenger(WCSimTuningParameters* WCTuningPars):
   QeratioWB->SetParameterName("QeratioWB",true);
   QeratioWB->SetDefaultValue(1.00);
 
+  PMTwiseQE = new G4UIcmdWithABool("/WCSim/tuning/PMTwiseQE",this);
+  PMTwiseQE->SetGuidance("Turn on/off PMT-wise tuning factors");
+  PMTwiseQE->SetParameterName("PMTwiseQE",true);
+  PMTwiseQE->SetDefaultValue(0);
+
   //jl145 - for Top Veto
   TVSpacing = new G4UIcmdWithADouble("/WCSim/tuning/tvspacing",this);
   TVSpacing->SetGuidance("Set the Top Veto PMT Spacing, in cm.");
@@ -107,6 +112,8 @@ WCSimTuningMessenger::~WCSimTuningMessenger()
   delete Holder;
   delete Qeratio;
   delete QeratioWB;
+  delete PMTwiseQE;
+
 
   //jl145 - for Top Veto
   delete TVSpacing;
@@ -244,6 +251,17 @@ void WCSimTuningMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
     printf("Setting WB Q.E. ratio factor %f\n",QeratioWB->GetNewDoubleValue(newValue));
   }
+
+  // ANNIE - Setting individual PMT-wise Q.E. factors
+  else if (command == PMTwiseQE){
+     //Set individual PMT-wise Q.E. values
+     WCSimTuningParams->SetPMTwiseQE(PMTwiseQE->GetNewBoolValue(newValue));
+     if (PMTwiseQE->GetNewBoolValue(newValue))
+       printf("Turning PMT-wise QE tuning On\n");
+     else
+       printf("Turning PMT-wise QE tuning Off\n");
+   }
+
 
   //jl145 - For Top Veto
 

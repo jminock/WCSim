@@ -120,6 +120,7 @@ public:
   void SetHolder(bool iHolder) {Holder = iHolder;}
   void SetQERatio(double iQERatio) {QERatio = iQERatio;}
   void SetQERatioWB(double iQERatioWB) {QERatioWB = iQERatioWB;}
+  void SetPMTWiseQE(bool iPMTWiseQE) {PMTWiseQE = iPMTWiseQE;}
   void SetTvspacing(double iTvspacing) {Tvspacing = iTvspacing;}
   void SetTopveto(bool iTopveto) {Topveto = iTopveto;}
   //WCSimTuningParameters gets
@@ -135,6 +136,7 @@ public:
   bool GetHolder() {return Holder;}
   double GetQERatio() {return QERatio;}
   double GetQERatioWB() {return QERatioWB;}
+  double GetPMTWiseQE() {return PMTWiseQE;}
   double GetTvspacing() {return Tvspacing;}
   bool   GetTopveto() {return Topveto;}
   //WCSimPhysicsListFactory sets
@@ -212,6 +214,7 @@ private:
   bool Holder;
   double QERatio;
   double QERatioWB;
+  bool PMTWiseQE;
   double Tvspacing;
   bool   Topveto;
 

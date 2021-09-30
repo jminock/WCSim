@@ -24,6 +24,7 @@ WCSimTuningParameters::WCSimTuningParameters()
  holder=false;
  QEratio=1.00;
  QEratioWB=1.00;
+ PMTWiseQE=false;
 
  //jl145 - For Top Veto
  tvspacing = 100.0;
@@ -52,6 +53,7 @@ void WCSimTuningParameters::SaveOptionsToOutput(WCSimRootOptions * wcopt)
   wcopt->SetHolder(holder);
   wcopt->SetQERatio(QEratio);
   wcopt->SetQERatioWB(QEratioWB);
+  wcopt->SetPMTWiseQE(PMTWiseQE);
   wcopt->SetTvspacing(tvspacing);
   wcopt->SetTopveto(topveto);
 }
