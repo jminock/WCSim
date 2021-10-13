@@ -114,6 +114,7 @@ public:
   void SetMieff(double iMieff) {Mieff = iMieff;}
   void SetTeflonrff(double iTeflonrff) {Teflonrff = iTeflonrff;}
   void SetHolderrff(double iHolderrff) {Holderrff = iHolderrff;}
+  void SetHolderrffLUX(double iHolderrffLUX) {HolderrffLUX = iHolderrffLUX;}
   void SetLinerrff(double iLinerrff) {Linerrff = iLinerrff;}
   void SetHolder(bool iHolder) {Holder = iHolder;}
   void SetTvspacing(double iTvspacing) {Tvspacing = iTvspacing;}
@@ -127,6 +128,7 @@ public:
   double GetTeflonrff() {return Teflonrff;}
   double GetLinerrff() {return Linerrff;}
   double GetHolderrff() {return Holderrff;}
+  double GetHolderrffLUX() {return HolderrffLUX;}
   bool GetHolder() {return Holder;}
   double GetTvspacing() {return Tvspacing;}
   bool   GetTopveto() {return Topveto;}
@@ -200,6 +202,7 @@ private:
   double Teflonrff;
   double Linerrff;
   double Holderrff;
+  double HolderrffLUX;
   bool Holder;
   double Tvspacing;
   bool   Topveto;

@@ -37,6 +37,7 @@ private:
   G4UIcmdWithADouble* Teflonrff;
   G4UIcmdWithADouble* Linerrff;
   G4UIcmdWithADouble* Holderrff;
+  G4UIcmdWithADouble* HolderrffLUX;
   G4UIcmdWithABool *Holder;
 
   //For Top Veto - jl145

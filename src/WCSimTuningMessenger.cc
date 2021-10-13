@@ -47,6 +47,11 @@ WCSimTuningMessenger::WCSimTuningMessenger(WCSimTuningParameters* WCTuningPars):
   Holderrff->SetParameterName("Holderrff",true);
   Holderrff->SetDefaultValue(1.00);
 
+  HolderrffLUX = new G4UIcmdWithADouble("/WCSim/tuning/holderrfflux",this);
+  HolderrffLUX->SetGuidance("Set LUX/ETEL holder reflectivity parameter");
+  HolderrffLUX->SetParameterName("HolderrffLUX",true);
+  HolderrffLUX->SetDefaultValue(1.00);
+
   Linerrff = new G4UIcmdWithADouble("/WCSim/tuning/linerrff",this);
   Linerrff->SetGuidance("Set Liner reflectivity parameter");
   Linerrff->SetParameterName("Linerrff",true);
@@ -81,6 +86,7 @@ WCSimTuningMessenger::~WCSimTuningMessenger()
   //ANNIE-specific variables
   delete Teflonrff;
   delete Holderrff;
+  delete HolderrffLUX;
   delete Linerrff;
   delete Holder;
 
@@ -163,6 +169,17 @@ void WCSimTuningMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   WCSimTuningParams->SetHolderrff(Holderrff->GetNewDoubleValue(newValue));
 
   printf("Setting ANNIE holder reflectivity parameter %f\n",Holderrff->GetNewDoubleValue(newValue));
+  
+  }
+
+  // ANNIE - ETEL/LUX Holder reflectivity
+  if (command == HolderrffLUX){
+    // Set the LUX/ETEL holder reflectivity parameter
+    //    printf("Input parameter %f\n",Holderrff->GetNewDoubleValue(newValue));
+
+  WCSimTuningParams->SetHolderrffLUX(HolderrffLUX->GetNewDoubleValue(newValue));
+
+  printf("Setting LUX/ETEL holder reflectivity parameter %f\n",HolderrffLUX->GetNewDoubleValue(newValue));
   
   }
 

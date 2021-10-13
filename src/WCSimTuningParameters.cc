@@ -18,6 +18,7 @@ WCSimTuningParameters::WCSimTuningParameters()
  //ANNIE-default values
  teflonrff=1.00;
  holderrff=1.00;
+ holderrfflux=1.00;
  linerrff=1.00;
  holder=false;
 
@@ -42,6 +43,7 @@ void WCSimTuningParameters::SaveOptionsToOutput(WCSimRootOptions * wcopt)
   wcopt->SetMieff(mieff);
   wcopt->SetTeflonrff(teflonrff);
   wcopt->SetHolderrff(holderrff);
+  wcopt->SetHolderrffLUX(holderrfflux);
   wcopt->SetLinerrff(linerrff);
   wcopt->SetHolder(holder);
   wcopt->SetTvspacing(tvspacing);

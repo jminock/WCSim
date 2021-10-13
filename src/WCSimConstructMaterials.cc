@@ -343,7 +343,7 @@ void WCSimDetectorConstruction::ConstructMaterials()
   Acrylic -> AddElement(elH, 6);
   Acrylic -> AddElement(elC, 4);
   Acrylic -> AddElement(elO, 2);
- 
+
 // **** END NCV additions ****
 
   //*****************SciBooNE integration
@@ -1053,7 +1053,7 @@ void WCSimDetectorConstruction::ConstructMaterials()
    // ===========================
    // re-use the properties from steel, only reflectivity is important?
    G4double LINERRFF = WCSimTuningParams->GetLinerrff();
-   G4double refLiner[] = {0.87*LINERRFF, 0.87*LINERRFF}; // from datasheet // add possibility to tune reflectivity value a little
+   G4double refLiner[] = {1.00*LINERRFF, 1.00*LINERRFF}; // from datasheet // add possibility to tune reflectivity value a little
    G4double rIndexLiner[] = { 1.5, 1.5};
    // remaining reflection type (lambertian) is the remainder from 1
    
@@ -1073,17 +1073,22 @@ void WCSimDetectorConstruction::ConstructMaterials()
    LinerOpSurface->SetSigmaAlpha(0.1);
    LinerOpSurface->SetMaterialPropertiesTable(linerSurfaceMatProps);
 
+   //ANNIE Holder are made out of polyethlene
+   //Should be close to acrylic white as defined in ratpac simulation
+   //Use refractive index for material 'acrylic_white' from ratpac
    G4double HOLDERRFF = WCSimTuningParams->GetHolderrff();
+   const G4int arrEntriesHolder = 62;
    G4double refHolder[] = {1.00*HOLDERRFF,1.00*HOLDERRFF};
-   G4double rIndexHolder[] = {1.531,1.531};
+   G4double photEneHolder[] = {1.55*CLHEP::eV, 1.569620253*CLHEP::eV, 1.58974359*CLHEP::eV, 1.61038961*CLHEP::eV, 1.631578947*CLHEP::eV, 1.653333333*CLHEP::eV, 1.675675676*CLHEP::eV, 1.698630137*CLHEP::eV, 1.722222222*CLHEP::eV, 1.746478873*CLHEP::eV, 1.771428571*CLHEP::eV, 1.797101449*CLHEP::eV, 1.823529412*CLHEP::eV, 1.850746269*CLHEP::eV, 1.878787879*CLHEP::eV, 1.907692308*CLHEP::eV, 1.9375*CLHEP::eV, 1.968253968*CLHEP::eV, 2*CLHEP::eV, 2.032786885*CLHEP::eV, 2.066666667*CLHEP::eV, 2.101694915*CLHEP::eV, 2.137931034*CLHEP::eV, 2.175438596*CLHEP::eV, 2.214285714*CLHEP::eV, 2.254545455*CLHEP::eV, 2.296296296*CLHEP::eV, 2.339622642*CLHEP::eV, 2.384615385*CLHEP::eV, 2.431372549*CLHEP::eV, 2.48*CLHEP::eV, 2.530612245*CLHEP::eV, 2.583333333*CLHEP::eV, 2.638297872*CLHEP::eV, 2.695652174*CLHEP::eV, 2.755555556*CLHEP::eV, 2.818181818*CLHEP::eV, 2.88372093*CLHEP::eV, 2.952380952*CLHEP::eV, 3.024390244*CLHEP::eV, 3.1*CLHEP::eV, 3.179487179*CLHEP::eV, 3.263157895*CLHEP::eV, 3.351351351*CLHEP::eV, 3.444444444*CLHEP::eV, 3.542857143*CLHEP::eV, 3.647058824*CLHEP::eV, 3.757575758*CLHEP::eV, 3.875*CLHEP::eV, 4*CLHEP::eV, 4.133333333*CLHEP::eV, 4.275862069*CLHEP::eV, 4.428571429*CLHEP::eV, 4.592592593*CLHEP::eV, 4.769230769*CLHEP::eV, 4.96*CLHEP::eV, 5.166666667*CLHEP::eV, 5.391304348*CLHEP::eV, 5.636363636*CLHEP::eV, 5.904761905*CLHEP::eV, 6.2*CLHEP::eV, 20.66666667*CLHEP::eV};
+   G4double rIndexHolder[] = {1.485, 1.485, 1.485, 1.485, 1.486, 1.486, 1.486, 1.486, 1.487, 1.487, 1.487, 1.488, 1.488, 1.488, 1.488, 1.489, 1.489, 1.49, 1.49, 1.49, 1.491, 1.491, 1.492, 1.492, 1.493, 1.493, 1.494, 1.494, 1.495, 1.496, 1.496, 1.497, 1.498, 1.499, 1.499, 1.5, 1.501, 1.502, 1.503, 1.505, 1.506, 1.507, 1.509, 1.51, 1.512, 1.514, 1.516, 1.519, 1.521, 1.524, 1.527, 1.531, 1.534, 1.539, 1.544, 1.55, 1.556, 1.564, 1.573, 1.584, 1.597, 1.597};
 
    G4MaterialPropertiesTable *holderSurfaceMatProps = new G4MaterialPropertiesTable();
-   holderSurfaceMatProps->AddProperty("RINDEX", photEneSteel, rIndexHolder, arrEntries);
+   holderSurfaceMatProps->AddProperty("RINDEX", photEneHolder, rIndexHolder, arrEntriesHolder);
    holderSurfaceMatProps->AddProperty("ABSLENGTH",photEneSteel,absSteel,arrEntries);		//This should probably be something else, check (TODO)
    holderSurfaceMatProps->AddProperty("REFLECTIVITY",photEneSteel, refHolder,arrEntries);
-   holderSurfaceMatProps->AddProperty("SPECULARLOBECONSTANT",photEneSteel,specularlobeSteel,arrEntries);
-   holderSurfaceMatProps->AddProperty("SPECULARSPIKECONSTANT",photEneSteel,specularspikeSteel,arrEntries);
-   holderSurfaceMatProps->AddProperty("BACKSCATTERCONSTANT",photEneSteel,backscatterSteel,arrEntries);
+   holderSurfaceMatProps->AddProperty("SPECULARLOBECONSTANT",photEneSteel,specularlobeSteel,arrEntries); // Do we need this?
+   holderSurfaceMatProps->AddProperty("SPECULARSPIKECONSTANT",photEneSteel,specularspikeSteel,arrEntries); // Do we need this?
+   holderSurfaceMatProps->AddProperty("BACKSCATTERCONSTANT",photEneSteel,backscatterSteel,arrEntries); // Do we need this?
    
    HolderOpSurface = new G4OpticalSurface("HolderOpSurface");
    HolderOpSurface->SetType(dielectric_metal); // fine, reflection or absorption only.
@@ -1092,6 +1097,28 @@ void WCSimDetectorConstruction::ConstructMaterials()
    HolderOpSurface->SetSigmaAlpha(0.1);
    HolderOpSurface->SetMaterialPropertiesTable(holderSurfaceMatProps);
 
+   //LUX & ETEL Holders are made of Schedule 80 PVT
+   // Not completely black & has some kind of reflective surface
+   // --> Reflectivity is assumed to be > 0.5
+   // Assume same refractive index as for the ANNIE holders
+
+   G4double LUXHOLDERRFF = WCSimTuningParams->GetHolderrffLUX();
+   G4double refHolderLUX[] = {1.00*LUXHOLDERRFF,1.00*LUXHOLDERRFF};
+
+   G4MaterialPropertiesTable *luxholderSurfaceMatProps= new G4MaterialPropertiesTable();
+   luxholderSurfaceMatProps->AddProperty("RINDEX",photEneHolder, rIndexHolder, arrEntriesHolder);
+   luxholderSurfaceMatProps->AddProperty("ABSLENGTH",photEneSteel,absSteel,arrEntries); //This should probably be something else, check
+   luxholderSurfaceMatProps->AddProperty("REFLECTIVITY",photEneSteel, refHolderLUX, arrEntries);
+   luxholderSurfaceMatProps->AddProperty("SPECULARLOBECONSTANT",photEneSteel,specularlobeSteel,arrEntries); //Do we need this?
+   luxholderSurfaceMatProps->AddProperty("SPECULARSPIKECONSTANT",photEneSteel,specularspikeSteel,arrEntries); // Do we need this?
+   luxholderSurfaceMatProps->AddProperty("BACKSCATTERCONSTANT",photEneSteel,backscatterSteel,arrEntries); //Do we need this?
+
+   LUXHolderOpSurface = new G4OpticalSurface("LUXHolderOpSurface");
+   LUXHolderOpSurface->SetType(dielectric_metal); //fine, reflection or absorption only
+   LUXHolderOpSurface->SetModel(unified);
+   LUXHolderOpSurface->SetFinish(ground);
+   LUXHolderOpSurface->SetSigmaAlpha(0.1);
+   LUXHolderOpSurface->SetMaterialPropertiesTable(luxholderSurfaceMatProps);
 
 
    //	------------- Surfaces --------------

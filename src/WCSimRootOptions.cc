@@ -179,6 +179,7 @@ void WCSimRootOptions::Print(Option_t *) const
     << "\tTeflonrff: " << Teflonrff << endl
     << "\tLinerrff: " << Linerrff << endl
     << "\tHolderrff: " << Holderrff << endl
+    << "\tHolderrffLUX: " << HolderrffLUX << endl
     << "\tHolder: " << Holder << endl
     << "\tTvspacing: " << Tvspacing << endl
     << "\tTopveto: " << Topveto << endl

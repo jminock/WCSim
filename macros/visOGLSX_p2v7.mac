@@ -82,6 +82,12 @@
 /vis/geometry/set/visibility WCANNIEHolder -1 1
 /vis/geometry/set/forceSolid WCANNIEHolder -1 1
 /vis/geometry/set/colour WCANNIEHolder -1 1 0 0 1
+/vis/geometry/set/visibility WCLUXHolder -1 1
+/vis/geometry/set/forceSolid WCLUXHolder -1 1
+/vis/geometry/set/colour WCLUXHolder -1 1 0 0 1
+/vis/geometry/set/visibility WCETELHolder -1 1
+/vis/geometry/set/forceSolid WCETELHolder -1 1
+/vis/geometry/set/colour WCETELHolder -1 1 0 0 1
 
 ## MRD
 #/vis/geometry/set/forceSolid hpaddle_log -1 1

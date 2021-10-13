@@ -34,6 +34,9 @@ public:
   G4double GetHolderrff() {return holderrff;}
   void SetHolderrff(G4double rparam) {holderrff=rparam;}
 
+  G4double GetHolderrffLUX() {return holderrfflux;}
+  void SetHolderrffLUX(G4double rparam) {holderrfflux=rparam;}
+
   G4double GetLinerrff() {return linerrff;}
   void SetLinerrff(G4double rparam) {linerrff=rparam;}
 
@@ -66,6 +69,7 @@ private:
   // ANNIE-specfic tuning parameters
   G4double teflonrff;   //Teflon-wrapped Inner Structure --> Reflectivity tuning factor
   G4double holderrff;   //ANNIE holders --> Reflectivity tuning factor
+  G4double holderrfflux;   //LUX/ETEL holders --> Reflectivity tuning factor
   G4double linerrff;    //Liner --> Reflectivity tuning factor
   G4bool holder;        //Should ANNIE PMT holders be implemented in the simulation?
 

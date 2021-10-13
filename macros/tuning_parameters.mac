@@ -7,9 +7,10 @@
 /WCSim/tuning/mieff 0.0
 
 # ANNIE tuning parameters
-/WCSim/tuning/teflonrff 1.00
-/WCSim/tuning/holderrff 1.00
-/WCSim/tuning/linerrff 1.00
+/WCSim/tuning/teflonrff 0.90		#default: 0.90
+/WCSim/tuning/holderrff 0.90		#default: 0.90
+/WCSim/tuning/holderrfflux 0.70		#default: 0.70
+/WCSim/tuning/linerrff 0.87		#default: 0.87
 
 #Turning holders on (1) or off (0)
 /WCSim/tuning/holder 1

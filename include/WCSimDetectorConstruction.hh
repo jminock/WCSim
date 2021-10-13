@@ -288,6 +288,9 @@ private:
   // ANNIE Holder surface
   G4OpticalSurface * HolderOpSurface;
 
+  // LUX / ETEL Holder surface
+  G4OpticalSurface * LUXHolderOpSurface;
+
   // The messenger we use to change the geometry.
 
   WCSimDetectorMessenger* messenger;
@@ -305,6 +308,7 @@ private:
   void ConstructANNIECapsSheet(G4int zflip); //Only create the black sheet for top and bottom planes, no PMT placement
 
   void ConstructANNIEHolders(); //Construct ANNIE PMT holders
+  void ConstructLUXETELHolders(); //Construct LUX + ETEL PMT holders (top + bottom PMTs)
 
   void  ConstructMaterials();
 
