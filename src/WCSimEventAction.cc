@@ -1324,6 +1324,7 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
   // only do this for tank event - no need to duplicate particle information in mrd & veto
   int k;
   if(detectorElement=="tank"){
+    runAction->incrementEventsGenerated();
     //Modify to add decay products
     for (k=0;k<jhfNtuple.npar;k++){ // should be just 2
       float dir[3];
@@ -1413,7 +1414,6 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
       if ( trj->GetSaveFlag() && !ignoreneutron){
         // initial point of the trajectory
         G4TrajectoryPoint* aa =   (G4TrajectoryPoint*)trj->GetPoint(0);
-        if(detectorElement=="tank") runAction->incrementEventsGenerated();
         
         G4int         ipnu   = trj->GetPDGEncoding();
         G4int         id     = trj->GetTrackID();
