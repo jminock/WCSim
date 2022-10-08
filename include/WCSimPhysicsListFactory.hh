@@ -7,8 +7,13 @@
 #include "G4UnitsTable.hh"
 #include "G4OpticalPhysics.hh"
 
+#include <G4FastSimulationManagerProcess.hh>
+#include <G4ParticleDefinition.hh>
+#include <G4ProcessManager.hh>
+
 #include "WCSimPhysicsListFactoryMessenger.hh"
 #include "WCSimRootOptions.hh"
+#include "PhysicsListRAT.hh"
 
 //class WCSimPhysicsList;
 
@@ -29,8 +34,11 @@ class WCSimPhysicsListFactory : public G4VModularPhysicsList
     void ConstructParticle();
     void ConstructProcess();
     void SetCuts();
+    void AddParameterization();
 
     void SaveOptionsToOutput(WCSimRootOptions * wcopt);
+
+    PhysicsListRAT *rat;
 
   private:
 

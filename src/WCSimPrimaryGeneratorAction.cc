@@ -2,6 +2,7 @@
 #include "WCSimPrimaryGeneratorAction.hh"
 #include "WCSimDetectorConstruction.hh"
 #include "WCSimPrimaryGeneratorMessenger.hh"
+#include "WCSimEventInformation.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -145,6 +146,8 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4bool useNuanceTextFormat = true;
 
+  WCSimEventInformation *eventInfo = new WCSimEventInformation();
+  anEvent->SetUserInformation((G4VUserEventInformation*) eventInfo);
 
   // Do for every event
 

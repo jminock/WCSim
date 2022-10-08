@@ -63,6 +63,13 @@ public:
   G4bool GetTopVeto() {return topveto;}
   void SetTopVeto(G4double tparam) {topveto=tparam;}
 
+  //RATPAC comparison variables
+  void SetMaterialRAT(G4int useRAT){userat = useRAT;}
+  G4int GetMaterialRAT() {return userat;}
+
+  void SetPhotons60nm(G4int sim60nm){sim60 = sim60nm;}
+  G4int GetPhotons60nm() {return sim60;}
+
   void SaveOptionsToOutput(WCSimRootOptions * wcopt);
 
 private:
@@ -89,6 +96,10 @@ private:
   G4double QEratio;	//Factor by which the PMT Q.E. can be scaled
   G4double QEratioWB;	//Factor by which the WB PMT Q.E. can be scaled
   G4bool PMTWiseQE;	//Should each PMT have its own Q.E. scaling?
+
+  //RATPAC comparison variables
+  G4int sim60;
+  G4int userat;
 
   //For Top Veto - jl145
   G4double tvspacing;
