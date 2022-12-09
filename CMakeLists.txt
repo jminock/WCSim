@@ -11,7 +11,7 @@ project(WCSim)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -fdiagnostics-color=always -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fdiagnostics-color=always -std=c++14") #-fmax-errors=1
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fdiagnostics-color=always -std=c++1y") #-fmax-errors=1
 # NOTE: Geant4.10.2 changes the way VisualizationManager is instantiated - requires a verbosity argument.  
 # To handle the two types of instantiation: this env variable needs to be defined for geant versions > 10.1:
 if(DEFINED ENV{GEANT4_10_2})
@@ -57,6 +57,7 @@ set(_root_internal_libraries
     # for GENIE
     Geom
     EGPythia6
+    GenVector
 )
 set(Root_LIBRARIES ${_root_internal_libraries})
 
@@ -66,7 +67,7 @@ include_directories($ENV{GENIE}/src)
 link_directories($ENV{GENIE}/lib)
 
 set(_genie_internal_libraries
-    GAlgorithm GBaryonResonance GBase GBodekYang GCharm GCoh GDfrc GDIS GCrossSections GDecay GElas GElFF GHEP GEVGCore GEVGModules GEVGDrivers GGiBUU GHadronTransp GFragmentation GInteraction GLlewellynSmith GMEC GMessenger GNuGamma GNuE GNtuple GNuclear GNumerical GQPM GPDG GPDF GQEL GRES GRegistry GUtils GGeo GFluxDrivers GVLE GMuELoss GReWeight GNucleonDecay
+    GFwAlg GFwUtl GPhDfrcEG GPhIBDXS GPhQELXS GFwEG GPhAMNGEG GPhDfrcXS GPhMEL GPhResEG GFwGHEP GPhAMNGXS GPhDISEG GPhMNucEG GPhResXS GFwInt GPhChmXS GPhDISXS GPhMNucXS GPhStrEG GFwMsg GPhCmn GPhGlwResEG GPhNuclSt GPhStrXS GFwNtp GPhCohEG GPhGlwResXS GPhNuElEG GPhXSIg GFwNum GPhCohXS GPhHadnz GPhNuElXS GTlFlx GFwParDat GPhDcy GPhHadTransp GPhPDF GTlGeo GFwReg GPhDeEx GPhIBDEG GPhQELEG
 )
 
 include_directories($ENV{LOG4CPP_FQ_DIR}/include)
