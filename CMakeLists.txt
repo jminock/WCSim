@@ -207,7 +207,6 @@ set(WCSIM_SCRIPTS
   geniedirectory.txt
   dirtdirectory.txt
   WCSimVersion.txt
-  CommitHash.txt
   PMTPositions_Scan_Glass.txt
   PMTPositions_Scan.txt
   pmt_qe.txt
