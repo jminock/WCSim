@@ -47,12 +47,12 @@
 
 // GENIE headers
 #ifndef NO_GENIE
-#include "GHEP/GHepParticle.h"
-#include "Ntuple/NtpMCTreeHeader.h"
-#include "Interaction/Interaction.h"
-#include "PDG/PDGCodes.h"
-#include "PDG/PDGUtils.h"
-#include "PDG/PDGLibrary.h"
+#include "Framework/GHEP/GHepParticle.h"
+#include "Framework/Ntuple/NtpMCTreeHeader.h"
+#include "Framework/Interaction/Interaction.h"
+#include "Framework/ParticleData/PDGCodes.h"
+#include "Framework/ParticleData/PDGUtils.h"
+#include "Framework/ParticleData/PDGLibrary.h"
 #endif
 #include "NCVSD.hh"
 

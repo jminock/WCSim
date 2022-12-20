@@ -30,10 +30,10 @@
 
 // GENIE headers
 #ifndef NO_GENIE
-#include "GHEP/GHepParticle.h"
-#include "GHEP/GHepUtils.h"
-#include "Ntuple/NtpMCTreeHeader.h"
-#include "Interaction/Interaction.h"
+#include "Framework/GHEP/GHepParticle.h"
+#include "Framework/GHEP/GHepUtils.h"
+#include "Framework/Ntuple/NtpMCTreeHeader.h"
+#include "Framework/Interaction/Interaction.h"
 #endif
 
 // when loading dirt primaries, skip entries that are from upstream rock interactions. 
@@ -101,8 +101,8 @@ WCSimPrimaryGeneratorAction::WCSimPrimaryGeneratorAction(
   useLaserEvt = false;
   useBeamEvt = true;
   useGPSEvt = false;
-      
-#ifndef NO_GENIE
+
+#ifndef NO_GENIE      
   genierecordval = new genie::NtpMCEventRecord;
 #endif
 }
@@ -429,7 +429,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 #ifndef NO_GENIE
 			geniedata->SetBranchAddress("gmcrec",&genierecordval,&genierecordBranch);
 			genierecordBranch->SetAutoDelete(kTRUE);
-#else 
+#else
 			genierecordBranch=(TBranch*)1;
 #endif
 			vtxxBranch=inputdata->GetBranch("vx");
@@ -487,8 +487,8 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		} else { goto loadbeamentry; } // load the next entry
 		}
 #endif
-		
-#ifndef NO_GENIE
+
+#ifndef NO_GENIE		
 		Long64_t genielocalEntry = geniedata->LoadTree(genieentrybranchval);
 		// load the appropriate genie entry. we assume 1:1 correspondance of genie:g4dirt files.
 		// So the following should not be necessary, as the files should be loaded synchronously
@@ -978,7 +978,7 @@ void WCSimPrimaryGeneratorAction::LoadNewPrimaries(){
 	metadata->SetBranchAddress("inputFluxName",&nufluxfilenameval,&nufluxfilenameBranch);
 #ifndef NO_GENIE
 	geniedata->SetBranchAddress("gmcrec",&genierecordval,&genierecordBranch);
-#else 
+#else
 	genierecordBranch=(TBranch*)1;
 #endif
 	
