@@ -50,13 +50,13 @@ RUN mkdir -p /home/annie && \
     echo '. /opt/rh/devtoolset-3/enable' >> /sourceme
 
 # fsplit
-RUN mkdir /home/annie/fsplit && cd /home/annie/fsplit && \
+RUN source /sourceme && mkdir /home/annie/fsplit && cd /home/annie/fsplit && \
     wget https://gist.githubusercontent.com/marc1uk/c0e32d955dd1c06ef69d80ce643018ad/raw/10e592d42737ecc7dca677e774ae66dcb5a3859d/fsplit.c && \
     gcc fsplit.c -o fsplit && \
     echo 'export PATH=/home/annie/fsplit/:${PATH}' >> /sourceme
 
 # log4cpp
-RUN cd /home/annie && \
+RUN source /sourceme && cd /home/annie && \
     cvs -d :pserver:anonymous@log4cpp.cvs.sourceforge.net:/cvsroot/log4cpp -z3 co log4cpp && \
     cd log4cpp/ && \
     mkdir install && \
