@@ -406,12 +406,13 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		if(loadNewPrimaries){ LoadNewPrimaries(); } // update TChain if a new file is loaded by messenger
 		//inputdata has already had tree loaded at the end of last event's GeneratePrimaries call
 		//localEntry will already be the value of the NEXT entry
-		metadata->LoadTree(inputEntry);
+//		metadata->LoadTree(inputEntry);
 		
 		Int_t nextTreeNumber = inputdata->GetTreeNumber();
 		if(treeNumber!=nextTreeNumber){
 			G4cout<< "Reached end of Tree. Last entries' tree number was "
 						<< treeNumber <<", this entries' tree number is "<< nextTreeNumber <<G4endl;
+			metadata->LoadTree(nextTreeNumber);
 			dirtFileName = inputdata->GetCurrentFile()->GetName(); // new tree, new file
 			char* dirtFileNameAsChar = strdup(dirtFileName.c_str());
 			dirtFileName = basename(dirtFileNameAsChar);
@@ -465,7 +466,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		nuPVBranch->GetEntry(localEntry);
 		nuvtxmatBranch->GetEntry(localEntry);
 		genieentryBranch->GetEntry(localEntry);
-		nufluxfilenameBranch->GetEntry(localEntry);
+		nufluxfilenameBranch->GetEntry(nextTreeNumber);
 		
 		// note info about this input event for recording into output file
 		dirtEntryNum = localEntry;
