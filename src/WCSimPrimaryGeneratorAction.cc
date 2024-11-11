@@ -817,7 +817,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			
 			particleGun->SetParticleEnergy(keval);       // !!!kinetic!!! energy
 			particleGun->SetParticlePosition(thevtx);
-			//particleGun->SetParticleTime(vtxtval);     // set event time t=0 for prompt trigger.
+			particleGun->SetParticleTime(vtxtval);     // set event time t=0 for prompt trigger.
 			particleGun->SetParticleMomentumDirection(thepdir);
 			particleGun->GeneratePrimaryVertex(anEvent); //anEvent provided by G4 when invoking the method
 			//G4cout<<"Vertex set"<<G4endl;

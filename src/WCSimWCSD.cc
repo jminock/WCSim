@@ -114,14 +114,14 @@ G4bool WCSimWCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if (pmtwiseqe && detectorElement=="tank" && replicaNumber<133 && replicaNumber>0) pmtwiseratio = vector_pmtqe.at(replicaNumber-1);
 
   G4double QEratio = tuning->GetQERatio();
-  G4double QEratioWB = tuning->GetQERatioWB();
+  //G4double QEratioWB = tuning->GetQERatioWB();
   //G4cout <<"QERatio: "<<QEratio<<", QEratioWB: "<<QEratioWB<<G4endl;
   //G4cout <<"volumeName: "<<volumeName<<", replicaNumber: "<<replicaNumber<<", pmtwiseratio: "<<pmtwiseratio<<G4endl;
-  if (volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081" || volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081HQE" || volumeName == "ANNIEp2v7-glassFaceWCPMT_D784KFLB"){
-    ratio = QEratioWB;
-  } else { 
-    ratio = QEratio;
-  }
+  //if (volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081" || volumeName == "ANNIEp2v7-glassFaceWCPMT_R7081HQE" || volumeName == "ANNIEp2v7-glassFaceWCPMT_D784KFLB"){
+  //  ratio = QEratioWB;
+  //} else { 
+  ratio = QEratio;
+  //}
   ratio *= pmtwiseratio;
   //G4cout <<"ratio: "<<ratio<<G4endl; 
   //G4cout <<"QEratio: "<<QEratio<<G4endl;
