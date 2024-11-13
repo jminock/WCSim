@@ -13,7 +13,7 @@
 /WCSim/tuning/linerrff 0.87		#default: 0.87
 /WCSim/tuning/QEratio 1.025		#default: 1.40
 /WCSim/tuning/rgcffr7081 0.32		#default: 0.32
-/WCSim/tuning/QEratioWB 1.00		#default: 1.00
+/WCSim/tuning/QEratioWB 1.025		#default: 1.00
 
 #Turning holders on (1) or off (0)
 /WCSim/tuning/holder 1
