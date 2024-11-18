@@ -1,27 +1,14 @@
-export G4SYSTEM=Linux-g++
-# BASE is the directory where Geant is installed
-export BASE=/home/marc/LinuxSystemFiles/GEANT4/geant4-9.04.p04
-export G4INSTALL=${BASE}/install/src/geant4
-export G4LIB=${BASE}/install/lib
-export CLHEP_BASE_DIR=$/home/marc/LinuxSystemFiles/GEANT4/CLHEP
-#export LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
-
-# DATADIR is the directory where your Geant data files are stored
-export DATADIR=/home/marc/LinuxSystemFiles/GEANT4/geant4-10.01.p02/install/share/Geant4-10.1.2/data
-export G4LEVELGAMMADATA=${DATADIR}/PhotonEvaporation3.1	#used to be 2.1
-export G4RADIOACTIVEDATA=${DATADIR}/RadioactiveDecay4.2		#used to be 3.3
-export G4LEDATA=${DATADIR}/G4EMLOW6.41						#used to be 6.19
-export G4NEUTRONHPDATA=${DATADIR}/G4NDL3.14
-export G4ABLADATA=${DATADIR}/G4ABLA3.0
-
-export G4UI_USE_TERMINAL=1
-export G4UI_USE_TCSH=1
-export G4VIS_USE_OPENGLX=1
-export G4VIS_USE_RAYTRACER=1
-export G4VIS_USE_RAYTRACERX=1
-export OGLHOME=/usr/X11R6
-
-export G4WORKDIR=.
-
-#export G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION=1???????????????????????? 
-# does this still need to be done? from fixing Gd cature in Geant4.9.6
+#!/bin/bash
+export LOG4CPP_FQ_DIR=/home/annie/log4cpp/install
+export PYTHIA6_DIR=/home/annie/Pythia6Support/v6_424/
+export PYTHIA6_INCLUDE_DIR=/home/annie/Pythia6Support/v6_424/inc/
+export PYTHIA6_LIBRARY=/home/annie/Pythia6Support/v6_424/lib/
+export GENIE=/home/annie/Genie/GENIE-v3-master/install
+source /opt/rh/devtoolset-3/enable
+source /home/annie/Geant4/install/bin/geant4.sh
+source /home/annie/ROOT/install/bin/thisroot.sh
+source /home/annie/WCSim/WCSim/envHadronic.sh
+#export NO_GENIE=1 #ALLOWS WCSIM TO BE BUILT WITHOUT GENIE
+export PATH=${GENIE}/bin:/home/annie/lhapdf-5.9.1/install/bin:/home/annie/fsplit/:${PATH}
+export LD_LIBRARY_PATH=/home/annie/WCSim/WCSim:${GENIE}/lib:/home/annie/lhapdf-5.9.1/install/lib:/home/annie/Pythia6Support/v6_424/lib:/home/annie/log4cpp/install/lib:$LD_LIBRARY_PATH
+export ROOT_INCLUDE_PATH=/home/annie/WCSim/WCSim/include:$ROOT_INCLUDE_PATH
