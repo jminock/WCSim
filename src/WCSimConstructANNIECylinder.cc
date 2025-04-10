@@ -333,7 +333,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinder()
 		
 		G4ThreeVector LAPPDPosition = G4ThreeVector(CellCentreX,
 													CellCentreY,
-													-mainAnnulusHeight/2.+(j+1.)*verticalSpacingLAPPD);
+													-mainAnnulusHeight/2.+(j+1.)*verticalSpacingLAPPD - 261);
 		
 		G4VPhysicalVolume* physiWCBarrelLAPPD =
 		new G4PVPlacement(WCLAPPDRotationNext,                      // its rotation

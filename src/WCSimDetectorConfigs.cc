@@ -953,6 +953,7 @@ void WCSimDetectorConstruction::SetANNIEPhase2Geometryv7()
   GDMLFilename = "annie_v04.gdml";
   GDMLInnerStructureFilename = "PHASE2_INNER_STRUCTURE.gdml";
   addGDMLinnerstructure = true;
+  //addGDMLinnerstructure = false;
   doOverlapCheck = true;   // check overlaps when adding inner structure
   constructmrd = true;     // not optional without further work, except for visualization
   constructveto = true;    // not optional without further work, except for visualization
