@@ -231,19 +231,26 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 	
 	// Create rotation matrices for the orientations of the PMTs
 	std::vector<G4RotationMatrix*> pmt_rotation_matrices;
+	std::vector<G4RotationMatrix*> tilted_pmt_rotation_matrices;
 	// Bottom PMTs have panel number 0
 	G4RotationMatrix *WCBottomCapRotation = new G4RotationMatrix();
-	pmt_rotation_matrices.push_back(WCBottomCapRotation);	
+	pmt_rotation_matrices.push_back(WCBottomCapRotation);
+	tilted_pmt_rotation_matrices.push_back(WCBottomCapRotation);
 	// Barrel PMTs have panel numbers 1-8
 	for(int facei=0; facei<WCBarrelRingNPhi; facei++){
 		G4RotationMatrix* WCPMTRotationNext = new G4RotationMatrix(*WCPMTRotation);
+		G4RotationMatrix* WCPMTtiltRotationNext = new G4RotationMatrix(*WCPMTRotation);
 		WCPMTRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+		WCPMTtiltRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+		WCPMTtiltRotationNext->rotateY(-45*deg);
 		pmt_rotation_matrices.push_back(WCPMTRotationNext);
+		tilted_pmt_rotation_matrices.push_back(WCPMTtiltRotationNext);
 	}
 	// Top PMTs have panel number 9
 	G4RotationMatrix *WCTopCapRotation = new G4RotationMatrix();
 	WCTopCapRotation->rotateY(180.*deg);
 	pmt_rotation_matrices.push_back(WCTopCapRotation);
+	tilted_pmt_rotation_matrices.push_back(WCTopCapRotation);
 
 	G4cout <<"Size of pmt_rotation_matrices: "<<pmt_rotation_matrices.size()<<G4endl;
 
@@ -259,6 +266,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 		if (pmt_position_file.eof()) break;
 		//G4cout << "Read in PMT "<<PMTID<<", panel nr: "<<panel_nr<<", Position ("<<pmt_x<<","<<pmt_y<<","<<pmt_z<<"), PMT type: "<<pmt_type<<G4endl;
 		G4LogicalVolume *logicWCPMT = logicWCPMTs.at(pmt_type);
+		G4RotationMatrix *tilt_pmt_rot = tilted_pmt_rotation_matrices.at(panel_nr); 
 		G4RotationMatrix *pmt_rot = pmt_rotation_matrices.at(panel_nr);
 		pmt_x_shift = pmt_x*cm;
 		pmt_y_shift = (168.1-pmt_z)*cm;
@@ -266,6 +274,16 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 		//pmt_z_shift = ((pmt_y+14.45)-InnerStructureCentreOffset/10.)*cm;
 		//G4cout <<"Edited PMT position ("<<pmt_x_shift<<","<<pmt_y_shift<<","<<pmt_z_shift<<")"<<G4endl;
 		G4ThreeVector PMTPosition(pmt_x_shift,pmt_y_shift,pmt_z_shift);
+		if ((pmt_type == 3)||(pmt_type == 0 && panel_nr != 0)){
+		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(tilt_pmt_rot,	//its rotation
+															PMTPosition,		//its position
+															logicWCPMT,			//its logical volume
+															"WCPMT",			//its name
+															logicWCBarrel,		//its mother volume
+															false,				//no boolean operations
+															PMTID,				//ID for this PMT (=channelkey in data)
+															true);				//check overlaps*/
+		} else { 
 		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(pmt_rot,	//its rotation
 															PMTPosition,		//its position
 															logicWCPMT,			//its logical volume
@@ -274,6 +292,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 															false,				//no boolean operations
 															PMTID,				//ID for this PMT (=channelkey in data)
 															true);				//check overlaps*/
+		}
 	}
 	pmt_position_file.close();
 
