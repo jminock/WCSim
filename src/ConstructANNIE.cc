@@ -218,7 +218,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIE()
 			bordersurfaces.push_back(LinerSurface_log);
 		}
 		//G4cout<<"Writing GDML output file"<<G4endl;
-		//G4String GDMLOutFilename = "anniegeom_test6.gdml";
+		//G4String GDMLOutFilename = "anniegeom_test7.gdml";
 		//G4GDMLParser parser;  // Write GDML file
 		//parser.Write(GDMLOutFilename, waterTank_log);
 		//G4cout<<"GDML file "<<GDMLOutFilename<<" written"<<G4endl;	

@@ -242,7 +242,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 		G4RotationMatrix* WCPMTtiltRotationNext = new G4RotationMatrix(*WCPMTRotation);
 		WCPMTRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
 		WCPMTtiltRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
-		WCPMTtiltRotationNext->rotateY(-45*deg);
+		WCPMTtiltRotationNext->rotateY(-53*deg);
 		pmt_rotation_matrices.push_back(WCPMTRotationNext);
 		tilted_pmt_rotation_matrices.push_back(WCPMTtiltRotationNext);
 	}
