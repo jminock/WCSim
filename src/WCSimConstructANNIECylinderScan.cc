@@ -205,6 +205,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 	std::vector<G4LogicalVolume*> logicWCPMTs;
 	for(auto atankcollection : WCTankCollectionNames){
 		G4String thepmtname = WCPMTNameMap.at(atankcollection);
+G4cout<< " placing logicWCPMT: "<< thepmtname<< " at " << atankcollection << G4endl;
 		logicWCPMT= ConstructPMT(thepmtname, atankcollection, "tank");
 		logicWCPMTs.push_back(logicWCPMT);
 	}
@@ -272,8 +273,9 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 		pmt_y_shift = (168.1-pmt_z)*cm;
 		pmt_z_shift = ((pmt_y+14.45))*cm;
 		//pmt_z_shift = ((pmt_y+14.45)-InnerStructureCentreOffset/10.)*cm;
-		//G4cout <<"Edited PMT position ("<<pmt_x_shift<<","<<pmt_y_shift<<","<<pmt_z_shift<<")"<<G4endl;
+		G4cout <<"Edited PMT position ("<<pmt_x_shift<<","<<pmt_y_shift<<","<<pmt_z_shift<<")"<<G4endl;
 		G4ThreeVector PMTPosition(pmt_x_shift,pmt_y_shift,pmt_z_shift);
+
 		if ((pmt_type == 3)||(pmt_type == 0 && panel_nr != 0)){
 		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(tilt_pmt_rot,	//its rotation
 															PMTPosition,		//its position
@@ -317,13 +319,18 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
 		G4double CellCentreY = WCIDRadius * cos(dPhi*facei);
 		
 		double verticalSpacingLAPPD	= mainAnnulusHeight/(WCLAPPDperCellVertical+1);
-		
+		//G4cout<<"verticalSpacingLAPPD was: " << verticalSpacingLAPPD <<G4endl;
+		verticalSpacingLAPPD = 550;
+		//G4cout<<"verticalSpacingLAPPD now: " << verticalSpacingLAPPD <<G4endl;
 		for(G4double j = 0; j < WCLAPPDperCellVertical; j++){	// num LAPPD cols in the central ring
-		
-		G4ThreeVector LAPPDPosition = G4ThreeVector(CellCentreX,
-													CellCentreY,
-													-mainAnnulusHeight/2.+(j+1.)*verticalSpacingLAPPD);
-		
+	
+		//G4cout<< -mainAnnulusHeight/2. << " " << (j-1.)*verticalSpacingLAPPD<< G4endl;
+		G4ThreeVector LAPPDPosition = G4ThreeVector(CellCentreX, CellCentreY, -119.2+(j-1.)*verticalSpacingLAPPD);
+		if(CellCentreY > -100) continue;
+		if((facei == 4 && j == 0) || (facei == 4 && j == 2) || (facei == 3 && j == 1) || (facei == 5 && j == 1) ) continue;
+
+		G4cout<< "Putting "<< facei<< "th LAPPD at "<<LAPPDPosition<<G4endl;
+
 		G4VPhysicalVolume* physiWCBarrelLAPPD =
 		new G4PVPlacement(WCLAPPDRotationNext,                      // its rotation
 							LAPPDPosition,                          // its position
