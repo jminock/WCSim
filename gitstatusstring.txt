@@ -1,0 +1,190 @@
+diff --git a/gitstatusstring.txt b/gitstatusstring.txt
+index ab10018..e69de29 100644
+--- a/gitstatusstring.txt
++++ b/gitstatusstring.txt
+@@ -1,151 +0,0 @@
+-diff --git a/WCSim.mac b/WCSim.mac
+-index a89a96f..72ad07a 100644
+---- a/WCSim.mac
+-+++ b/WCSim.mac
+-@@ -459,7 +459,7 @@
+- #/WCSimIO/RootFile ANNIEtest_MRD_muon_sample  # for MRD range vs energy estimation
+- #/WCSimIO/RootFile wcsim_Muon_Tank_Sample_killed # for measuring # digits vs energy loss in tank
+- 
+--/run/beamOn 1000
+-+/run/beamOn 1
+- # should run 10000 events for bonsai
+- 
+- #exit
+-diff --git a/dirtdirectory.txt b/dirtdirectory.txt
+-index b2d6362..35fbf08 100644
+---- a/dirtdirectory.txt
+-+++ b/dirtdirectory.txt
+-@@ -1,3 +1,5 @@
+- # this file is used to provide the directory of the upstream dirt file to the EventAction
+- # it's appended to the dirt file name read in the PrimaryGeneratorAction and saved into the WCSimRootHeader
+--/pnfs/annie/persistent/users/moflaher/g4dirt_vincentsgenie/BNB_Water_10k_22-05-17
+-+/pnfs/annie/persistent/simulations/g4dirt/G1810a0211a/standardv1.0/tank/
+-+#/annie/app/users/jminock/WCSim/
+-+#./
+-diff --git a/geniedirectory.txt b/geniedirectory.txt
+-index be61113..c4739f4 100644
+---- a/geniedirectory.txt
+-+++ b/geniedirectory.txt
+-@@ -1,3 +1,5 @@
+- # this file is used to provide the directory of the upstream genie file to the EventAction
+- # it's appended to the genie file name read in the PrimaryGeneratorAction and saved into the WCSimRootHeader
+--/pnfs/annie/persistent/users/vfischer/genie_files/BNB_Water_10k_22-05-17
+-+/pnfs/annie/persistent/simulations/genie3/G1810a0211a/standardv1.0/tank/
+-+#/annie/app/users/jminock/WCSim/
+-+#./
+-diff --git a/macros/primaries_directory.mac b/macros/primaries_directory.mac
+-index 0332e90..f1dbc63 100644
+---- a/macros/primaries_directory.mac
+-+++ b/macros/primaries_directory.mac
+-@@ -2,6 +2,10 @@
+- # be sure that the neutrinosDirectory is set before setting the primariesDirectory!
+- #/mygen/neutrinosdirectory /home/marc/LinuxSystemFiles/WChSandBox/build/fluxesandtables/gntp.*.ghep.root
+- #/mygen/primariesdirectory /home/marc/LinuxSystemFiles/WChSandBox/build/fluxesandtables/annie_tank_flux.*.root
+--/mygen/neutrinosdirectory /pnfs/annie/persistent/users/vfischer/genie_files/BNB_Water_10k_22-05-17/gntp.*.ghep.root
+--/mygen/primariesdirectory /pnfs/annie/persistent/users/moflaher/g4dirt_vincentsgenie/BNB_Water_10k_22-05-17/annie_tank_flux.*.root
+-+#/mygen/neutrinosdirectory /pnfs/annie/persistent/simulations/genie3/G1810a0211a/standard/tank/gntp.*.ghep.root
+-+#/mygen/primariesdirectory /pnfs/annie/persistent/simulations/genie3/G1810a0211a/standard/tank/annie_tank_flux.*.root
+-+#/mygen/neutrinosdirectory /annie/app/users/jminock/genie_shed/gntp.1.ghep.root
+-+#/mygen/primariesdirectory /annie/app/users/jminock/genie_shed/annie_tank_flux.1.root
+-+/mygen/neutrinosdirectory ../temp/gntp.*.ghep.root
+-+/mygen/primariesdirectory ../temp/annie_tank_flux.*.root
+- /mygen/primariesoffset 0
+-diff --git a/sourceme b/sourceme
+-index 9c930a1..1f0750c 100644
+---- a/sourceme
+-+++ b/sourceme
+-@@ -9,6 +9,7 @@ source /home/annie/Geant4/install/bin/geant4.sh
+- source /home/annie/ROOT/install/bin/thisroot.sh
+- source /home/annie/WCSim/WCSim/envHadronic.sh
+- #export NO_GENIE=1 #ALLOWS WCSIM TO BE BUILT WITHOUT GENIE
+-+#export G4VIS_USE=1
+- export PATH=${GENIE}/bin:/home/annie/lhapdf-5.9.1/install/bin:/home/annie/fsplit/:${PATH}
+- export LD_LIBRARY_PATH=/home/annie/WCSim/WCSim:${GENIE}/lib:/home/annie/lhapdf-5.9.1/install/lib:/home/annie/Pythia6Support/v6_424/lib:/home/annie/log4cpp/install/lib:$LD_LIBRARY_PATH
+- export ROOT_INCLUDE_PATH=/home/annie/WCSim/WCSim/include:$ROOT_INCLUDE_PATH
+-diff --git a/src/ConstructANNIE.cc b/src/ConstructANNIE.cc
+-index 69a5751..8e8b218 100644
+---- a/src/ConstructANNIE.cc
+-+++ b/src/ConstructANNIE.cc
+-@@ -217,7 +217,11 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIE()
+- 		
+- 			bordersurfaces.push_back(LinerSurface_log);
+- 		}
+--		
+-+		G4cout<<"Writing GDML output file"<<G4endl;
+-+		G4String GDMLOutFilename = "anniegeom_test6.gdml";
+-+		G4GDMLParser parser;  // Write GDML file
+-+		parser.Write(GDMLOutFilename, waterTank_log);
+-+		G4cout<<"GDML file "<<GDMLOutFilename<<" written"<<G4endl;	
+- 		//============================================================
+- 		//               Add Inner Structure to Tank
+- 		//============================================================
+-diff --git a/src/WCSimConstructANNIECylinderScan.cc b/src/WCSimConstructANNIECylinderScan.cc
+-index a41e1b0..68c9a04 100644
+---- a/src/WCSimConstructANNIECylinderScan.cc
+-+++ b/src/WCSimConstructANNIECylinderScan.cc
+-@@ -231,19 +231,26 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
+- 	
+- 	// Create rotation matrices for the orientations of the PMTs
+- 	std::vector<G4RotationMatrix*> pmt_rotation_matrices;
+-+	std::vector<G4RotationMatrix*> tilted_pmt_rotation_matrices;
+- 	// Bottom PMTs have panel number 0
+- 	G4RotationMatrix *WCBottomCapRotation = new G4RotationMatrix();
+--	pmt_rotation_matrices.push_back(WCBottomCapRotation);	
+-+	pmt_rotation_matrices.push_back(WCBottomCapRotation);
+-+	tilted_pmt_rotation_matrices.push_back(WCBottomCapRotation);
+- 	// Barrel PMTs have panel numbers 1-8
+- 	for(int facei=0; facei<WCBarrelRingNPhi; facei++){
+- 		G4RotationMatrix* WCPMTRotationNext = new G4RotationMatrix(*WCPMTRotation);
+-+		G4RotationMatrix* WCPMTtiltRotationNext = new G4RotationMatrix(*WCPMTRotation);
+- 		WCPMTRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+-+		WCPMTtiltRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+-+		WCPMTtiltRotationNext->rotateY(-45*deg);
+- 		pmt_rotation_matrices.push_back(WCPMTRotationNext);
+-+		tilted_pmt_rotation_matrices.push_back(WCPMTtiltRotationNext);
+- 	}
+- 	// Top PMTs have panel number 9
+- 	G4RotationMatrix *WCTopCapRotation = new G4RotationMatrix();
+- 	WCTopCapRotation->rotateY(180.*deg);
+- 	pmt_rotation_matrices.push_back(WCTopCapRotation);
+-+	tilted_pmt_rotation_matrices.push_back(WCTopCapRotation);
+- 
+- 	G4cout <<"Size of pmt_rotation_matrices: "<<pmt_rotation_matrices.size()<<G4endl;
+- 
+-@@ -257,15 +264,28 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
+- 	while (!pmt_position_file.eof()){
+- 		pmt_position_file >> PMTID >> panel_nr >> pmt_x >> pmt_y >> pmt_z >> pmt_dirx >> pmt_diry >> pmt_dirz >> pmt_type;
+- 		if (pmt_position_file.eof()) break;
+--		//G4cout << "Read in PMT "<<PMTID<<", panel nr: "<<panel_nr<<", Position ("<<pmt_x<<","<<pmt_y<<","<<pmt_z<<"), PMT type: "<<pmt_type<<G4endl;
+-+		G4cout << "Read in PMT "<<PMTID<<", panel nr: "<<panel_nr<<", Position ("<<pmt_x<<","<<pmt_y<<","<<pmt_z<<"), PMT type: "<<pmt_type<<G4endl;
+- 		G4LogicalVolume *logicWCPMT = logicWCPMTs.at(pmt_type);
+-+		G4RotationMatrix *tilt_pmt_rot = tilted_pmt_rotation_matrices.at(panel_nr); 
+- 		G4RotationMatrix *pmt_rot = pmt_rotation_matrices.at(panel_nr);
+-+//		if ((pmt_type == 3)||(pmt_type == 0 && panel_nr != 0)) pmt_rot->rotateY(-45*deg);
+-+//		if(pmt_type == 0 && panel_nr != 0) pmt_rot->rotateY(45*deg);
+- 		pmt_x_shift = pmt_x*cm;
+- 		pmt_y_shift = (168.1-pmt_z)*cm;
+- 		pmt_z_shift = ((pmt_y+14.45))*cm;
+- 		//pmt_z_shift = ((pmt_y+14.45)-InnerStructureCentreOffset/10.)*cm;
+- 		//G4cout <<"Edited PMT position ("<<pmt_x_shift<<","<<pmt_y_shift<<","<<pmt_z_shift<<")"<<G4endl;
+- 		G4ThreeVector PMTPosition(pmt_x_shift,pmt_y_shift,pmt_z_shift);
+-+		if ((pmt_type == 3)||(pmt_type == 0 && panel_nr != 0)){
+-+		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(tilt_pmt_rot,	//its rotation
+-+															PMTPosition,		//its position
+-+															logicWCPMT,			//its logical volume
+-+															"WCPMT",			//its name
+-+															logicWCBarrel,		//its mother volume
+-+															false,				//no boolean operations
+-+															PMTID,				//ID for this PMT (=channelkey in data)
+-+															true);				//check overlaps*/
+-+		} else { 
+- 		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(pmt_rot,	//its rotation
+- 															PMTPosition,		//its position
+- 															logicWCPMT,			//its logical volume
+-@@ -274,6 +294,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
+- 															false,				//no boolean operations
+- 															PMTID,				//ID for this PMT (=channelkey in data)
+- 															true);				//check overlaps*/
+-+		}
+- 	}
+- 	pmt_position_file.close();
+- 
+diff --git a/src/ConstructANNIE.cc b/src/ConstructANNIE.cc
+index 4c2b553..d4d6534 100644
+--- a/src/ConstructANNIE.cc
++++ b/src/ConstructANNIE.cc
+@@ -217,11 +217,11 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIE()
+ 		
+ 			bordersurfaces.push_back(LinerSurface_log);
+ 		}
+-		//G4cout<<"Writing GDML output file"<<G4endl;
+-		//G4String GDMLOutFilename = "anniegeom_test6.gdml";
+-		//G4GDMLParser parser;  // Write GDML file
+-		//parser.Write(GDMLOutFilename, waterTank_log);
+-		//G4cout<<"GDML file "<<GDMLOutFilename<<" written"<<G4endl;	
++		G4cout<<"Writing GDML output file"<<G4endl;
++		G4String GDMLOutFilename = "anniegeom_test7.gdml";
++		G4GDMLParser parser;  // Write GDML file
++		parser.Write(GDMLOutFilename, waterTank_log);
++		G4cout<<"GDML file "<<GDMLOutFilename<<" written"<<G4endl;	
+ 		//============================================================
+ 		//               Add Inner Structure to Tank
+ 		//============================================================
+diff --git a/src/WCSimConstructANNIECylinderScan.cc b/src/WCSimConstructANNIECylinderScan.cc
+index f8d4dac..bd070ce 100644
+--- a/src/WCSimConstructANNIECylinderScan.cc
++++ b/src/WCSimConstructANNIECylinderScan.cc
+@@ -242,7 +242,7 @@ G4LogicalVolume* WCSimDetectorConstruction::ConstructANNIECylinderScan()
+ 		G4RotationMatrix* WCPMTtiltRotationNext = new G4RotationMatrix(*WCPMTRotation);
+ 		WCPMTRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+ 		WCPMTtiltRotationNext->rotateX((dPhi*facei)-67.5*deg+180*deg);
+-		WCPMTtiltRotationNext->rotateY(-45*deg);
++		WCPMTtiltRotationNext->rotateY(-53*deg);
+ 		pmt_rotation_matrices.push_back(WCPMTRotationNext);
+ 		tilted_pmt_rotation_matrices.push_back(WCPMTtiltRotationNext);
+ 	}
