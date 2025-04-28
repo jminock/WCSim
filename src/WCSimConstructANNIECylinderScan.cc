@@ -260,6 +260,7 @@ G4cout<< " placing logicWCPMT: "<< thepmtname<< " at " << atankcollection << G4e
 	std::string next_pmt;
 	double pmt_x, pmt_y, pmt_z, pmt_dirx, pmt_diry, pmt_dirz;
 	double pmt_x_shift, pmt_y_shift, pmt_z_shift;
+	double tilt_pmt_x_shift, tilt_pmt_y_shift, tilt_pmt_z_shift;
 	int panel_nr, pmt_type;
 	int PMTID;
 	while (!pmt_position_file.eof()){
@@ -272,13 +273,15 @@ G4cout<< " placing logicWCPMT: "<< thepmtname<< " at " << atankcollection << G4e
 		pmt_x_shift = pmt_x*cm;
 		pmt_y_shift = (168.1-pmt_z)*cm;
 		pmt_z_shift = ((pmt_y+14.45))*cm;
+		tilt_pmt_z_shift = (pmt_y+14.45+13.9)*cm;
 		//pmt_z_shift = ((pmt_y+14.45)-InnerStructureCentreOffset/10.)*cm;
 		G4cout <<"Edited PMT position ("<<pmt_x_shift<<","<<pmt_y_shift<<","<<pmt_z_shift<<")"<<G4endl;
 		G4ThreeVector PMTPosition(pmt_x_shift,pmt_y_shift,pmt_z_shift);
+		G4ThreeVector PMTPosition_tilt(pmt_x_shift,pmt_y_shift,tilt_pmt_z_shift);
 
 		if ((pmt_type == 3)||(pmt_type == 0 && panel_nr != 0)){
 		G4VPhysicalVolume *physicalWCPMT = new G4PVPlacement(tilt_pmt_rot,	//its rotation
-															PMTPosition,		//its position
+															PMTPosition_tilt,		//its position
 															logicWCPMT,			//its logical volume
 															"WCPMT",			//its name
 															logicWCBarrel,		//its mother volume
