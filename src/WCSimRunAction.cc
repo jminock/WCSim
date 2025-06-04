@@ -39,7 +39,7 @@ WCSimRunAction::WCSimRunAction(WCSimDetectorConstruction* test, WCSimRandomParam
   WCSimTree=0;
 
   wcsimrootoptions = new WCSimRootOptions();
-  wcsimrootoptions->PopulateFileVersion();   // read from files and/or git the WCSimVersion and git commit hash
+// wcsimrootoptions->PopulateFileVersion();   // read from files and/or git the WCSimVersion and git commit hash
 }
 
 WCSimRunAction::~WCSimRunAction()
