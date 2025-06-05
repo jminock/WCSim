@@ -81,7 +81,7 @@ private:
   G4String LAPPDRootFileName;
   G4int lappd_numhits;
   G4String dirtDirectory;  // retrieved from file if present
-  G4String genieDirectory;
+  G4String nuisanceDirectory;
  
   G4int lappdevt;
   std::vector<int> lappdhit_NoOfneighstripsHit;

@@ -45,15 +45,6 @@
 #include "TH1D.h"
 #include "TH2D.h"
 
-// GENIE headers
-#ifndef NO_GENIE
-#include "Framework/GHEP/GHepParticle.h"
-#include "Framework/Ntuple/NtpMCTreeHeader.h"
-#include "Framework/Interaction/Interaction.h"
-#include "Framework/ParticleData/PDGCodes.h"
-#include "Framework/ParticleData/PDGUtils.h"
-#include "Framework/ParticleData/PDGLibrary.h"
-#endif
 #include "NCVSD.hh"
 
 #ifndef _SAVE_RAW_HITS
@@ -138,13 +129,13 @@ WCSimEventAction::WCSimEventAction(WCSimRunAction* myRun,
   }
   
   // Read files if present that tell us where the upstream files came from (for grid jobs)
-  std::ifstream fin ("geniedirectory.txt"); // look for a file with this name in build dir
+  std::ifstream fin ("nuisancedirectory.txt"); // look for a file with this name in build dir
   if(not fin.is_open()){
-    G4cout<<"WARNING: No geniedirectory.txt file found, upstream file path will not be recorded!"<<G4endl;
+    G4cout<<"WARNING: No nuisancedirectory.txt file found, upstream file path will not be recorded!"<<G4endl;
   } else {
     std::string Line;
     std::stringstream ssL;
-    genieDirectory="";
+    nuisanceDirectory="";
     while (getline(fin, Line)){
       if (Line.empty()) continue;    // skip empty lines
       if (Line[0] == '#') continue;  // skip comment lines
@@ -152,11 +143,11 @@ WCSimEventAction::WCSimEventAction(WCSimRunAction* myRun,
       ssL.clear();                   // clear the IO error status
       ssL << Line;                   // read the line
       if (ssL.str() != ""){          // skip empty lines
-        ssL >> genieDirectory;       // space delimited
+        ssL >> nuisanceDirectory;       // space delimited
         break;                       // take the first accepted line
       }
     }
-    G4cout<<"Upstream genie directory is: "<<genieDirectory<<G4endl;
+    G4cout<<"Upstream nuisance directory is: "<<nuisanceDirectory<<G4endl;
     fin.close();
   }
   // repeat for the dirt directory
@@ -790,10 +781,10 @@ void WCSimEventAction::EndOfEventAction(const G4Event* evt)
   // ----------------------------------------------------------------------
   //  Get Event Information
   // ----------------------------------------------------------------------
-  // pull information about the genie primary interactions from the PrimaryGeneratorAction
-#ifdef NO_GENIE
+  // pull information about the nuisance primary interactions from the PrimaryGeneratorAction
+#ifdef NO_NUIS
   G4cout<<" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
-  G4cout<<" !!! Genie not loaded!!! Primary interaction information will not be filled! !!!"<<G4endl;
+  G4cout<<" !!! Nuisance not loaded!!! Primary interaction information will not be filled! !!!"<<G4endl;
   G4cout<<" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
 #endif
   }
@@ -1093,7 +1084,7 @@ void WCSimEventAction::EndOfEventAction(const G4Event* evt)
   
   G4cout<<"events generated so far: "<<(GetRunAction()->GetNumberOfEventsGenerated())<<G4endl;
   if(event_id%10000==0&&event_id!=0){
-    GetRunAction()->CreateNewOutputFile(); // careful: we should maintain 1:1:1 files genie:g4dirt:wcsim
+    GetRunAction()->CreateNewOutputFile(); // careful: we should maintain 1:1:1 files nuisance:g4dirt:wcsim
     if(isANNIE) CreateNewLAPPDFile(); // this must always come *after* the runaction version
   }
   
@@ -1296,14 +1287,14 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
 
   // add the information about upstream source
   G4String      dirtFileName = generatorAction->GetDirtFileName();
-  G4String     genieFileName = generatorAction->GetGenieFileName();
+  G4String     nuisanceFileName = generatorAction->GetNuisanceFileName();
   G4int      dirtEventNumber = generatorAction->GetDirtEntryNum();
-  G4int     genieEventNumber = generatorAction->GetGenieEntryNum();
+  G4int     nuisanceEventNumber = generatorAction->GetNuisanceEntryNum();
   WCSimRootEventHeader* theheader = wcsimrootevent->GetHeader();
   theheader->SetDirtFileName(dirtDirectory+"/"+dirtFileName);
-  theheader->SetGenieFileName(genieDirectory+"/"+genieFileName);
+  theheader->SetNuisanceFileName(nuisanceDirectory+"/"+nuisanceFileName);
   theheader->SetDirtEntryNum(dirtEventNumber);
-  theheader->SetGenieEntryNum(genieEventNumber);
+  theheader->SetNuisanceEntryNum(nuisanceEventNumber);
 
   G4Event *event = G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
   WCSimEventInformation *evInfo = dynamic_cast<WCSimEventInformation*>(event->GetUserInformation());

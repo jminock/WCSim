@@ -11,14 +11,6 @@
 #include <vector>
 #include <fstream>
 
-// GENIE headers
-#ifndef NO_GENIE
-#include "Framework/GHEP/GHepParticle.h"
-#include "Framework/GHEP/GHepRecord.h"
-#include "Framework/Ntuple/NtpMCTreeHeader.h"
-#include "Framework/Ntuple/NtpMCEventRecord.h"
-#include "Framework/Interaction/Interaction.h"
-#endif
 #include "WCSimRootOptions.hh"
 
 class WCSimDetectorConstruction;
@@ -60,9 +52,9 @@ public:
   G4ThreeVector GetTargetDir(G4int n = 0) {return targetdirs[n];};
   // ANNIE: trace upstream sources
   G4String  GetDirtFileName(){return dirtFileName;}
-  G4String GetGenieFileName(){return genieFileName;}
+  G4String GetNuisanceFileName(){return nuisanceFileName;}
   G4int    GetDirtEntryNum(){return dirtEntryNum;}
-  G4int   GetGenieEntryNum(){return genieEntryNum;}
+  G4int   GetNuisanceEntryNum(){return nuisanceEntryNum;}
 
   // older ...
   G4double GetNuEnergy() {return nuEnergy;};
@@ -95,9 +87,9 @@ private:
   G4bool   GenerateVertexInRock;
   
   G4String dirtFileName;
-  G4String genieFileName;
+  G4String nuisanceFileName;
   G4int dirtEntryNum;
-  G4int genieEntryNum;
+  G4int nuisanceEntryNum;
 
   // These go with jhfNtuple
   G4int mode;
@@ -120,21 +112,26 @@ private:
   
   TChain* inputdata;
   TChain* metadata;
-  TChain* geniedata;
+  TChain* nuisancedata;
 	
 	Long64_t localEntry;
 	Int_t inputEntry;
 	Int_t entriesInThisTree;
 	Int_t treeNumber;
-	TBranch* runBranch=0, *vtxxBranch=0, *vtxyBranch=0, *vtxzBranch=0, *vtxtBranch=0, *pxBranch=0, *pyBranch=0, *pzBranch=0, *EBranch=0, *KEBranch=0, *pdgBranch=0, *nTankBranch=0, *nupdgBranch=0, *nuvtxxBranch=0, *nuvtxyBranch=0, *nuvtxzBranch=0, *nuvtxtBranch=0, *nuPVBranch=0, *nuvtxmatBranch=0, *nuprimaryBranch=0, *nufluxfilenameBranch=0, *genieentryBranch=0, *genierecordBranch=0;
-	Int_t runbranchval, entrybranchval, ntankbranchval, nupdgval, genieentrybranchval, pdgval, nuprimaryval;
+	TBranch* runBranch=0, *vtxxBranch=0, *vtxyBranch=0, *vtxzBranch=0, *vtxtBranch=0, *pxBranch=0, *pyBranch=0, *pzBranch=0, *EBranch=0, *KEBranch=0, *pdgBranch=0, *nTankBranch=0, *nupdgBranch=0, *nuvtxxBranch=0, *nuvtxyBranch=0, *nuvtxzBranch=0, *nuvtxtBranch=0, *nuPVBranch=0, *nuvtxmatBranch=0, *nuprimaryBranch=0, *nufluxfilenameBranch=0, *nuisanceentryBranch=0, *nuisancemodeBranch=0, *nuisanceninitpBranch=0, *nuisancevtxxBranch=0, *nuisancevtxyBranch=0, *nuisancevtxzBranch=0, *nuisancenupdgBranch=0, *nuisancenueBranch=0, *nuisancepxBranch=0, *nuisancepyBranch=0, *nuisancepzBranch=0, *nuisancetgtpdgBranch=0, *nuisanceEBranch=0, *nuisancepdgBranch=0;
+	Int_t runbranchval, entrybranchval, ntankbranchval, nupdgval, nuisanceentrybranchval, pdgval, nuprimaryval, nuisancemodeval, nuisanceninitpval, nuisancenupdgval, nuisancetgtpdgval;
 	Double_t vtxxval, vtxyval, vtxzval, vtxtval, pxval, pyval, pzval, eval, keval, nuvtxxval, nuvtxyval, nuvtxzval, nuvtxtval;
+	Float_t nuisancevtxxval, nuisancevtxyval, nuisancevtxzval, nuisancenueval;
+	float nuisancepxval[200];
+	float nuisancepyval[200];
+	float nuisancepzval[200];
+	float nuisanceEval[200];
+	int nuisancepdgval[200];
 	Int_t* pdgbranchval=0, *nuprimarybranchval=0;
 	Double_t* vtxxbranchval=0, *vtxybranchval=0, *vtxzbranchval=0, *vtxtbranchval=0, *pxbranchval=0, *pybranchval=0, *pzbranchval=0, *ebranchval=0, *kebranchval=0;
 	Char_t nupvval[100];
 	Char_t numatval[100];
 	Char_t nufluxfilenameval[100];
-	genie::NtpMCEventRecord* genierecordval;
 	
 	G4String primariesDirectory;
 	G4String neutrinosDirectory;
@@ -180,7 +177,6 @@ public:
   void SetPrimariesOffset(G4int offset){ primariesoffset=offset; }
   inline G4bool IsGeneratingVertexInRock() { return GenerateVertexInRock; }
   inline void SetGenerateVertexInRock(G4bool choice) { GenerateVertexInRock = choice; }
-  genie::NtpMCEventRecord* GetGenieRecord() { return genierecordval; }
 
 };
 

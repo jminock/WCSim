@@ -1,0 +1,5 @@
+# this file is used to provide the directory of the upstream nuisance file to the EventAction
+# it's appended to the nuisance file name read in the PrimaryGeneratorAction and saved into the WCSimRootHeader
+/pnfs/annie/persistent/simulations/nuisance/nuwro/standardv1.0/tank/
+#/annie/app/users/jminock/WCSim/
+#./

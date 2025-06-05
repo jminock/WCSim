@@ -150,9 +150,9 @@
 ## PRIMARY SOURCES
 #####################################
 
-## Genie beam events
+## Nuisance beam events
 ####################
-/mygen/generator beam	# retrieve input primaries from GENIE output files
+/mygen/generator beam	# retrieve input primaries from NUISANCE output files
 
 ## Simple electron gun at WCSim origin using G4 Particle Gun
 #############################################################

@@ -1,5 +1,0 @@
-# this file is used to provide the directory of the upstream genie file to the EventAction
-# it's appended to the genie file name read in the PrimaryGeneratorAction and saved into the WCSimRootHeader
-/pnfs/annie/persistent/simulations/genie3/G1810a0211a/standardv1.0/tank/
-#/annie/app/users/jminock/WCSim/
-#./

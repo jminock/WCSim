@@ -28,14 +28,6 @@
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
 
-// GENIE headers
-#ifndef NO_GENIE
-#include "Framework/GHEP/GHepParticle.h"
-#include "Framework/GHEP/GHepUtils.h"
-#include "Framework/Ntuple/NtpMCTreeHeader.h"
-#include "Framework/Interaction/Interaction.h"
-#endif
-
 // when loading dirt primaries, skip entries that are from upstream rock interactions. 
 #ifndef ONLY_TANK_EVENTS
 //#define ONLY_TANK_EVENTS
@@ -101,10 +93,6 @@ WCSimPrimaryGeneratorAction::WCSimPrimaryGeneratorAction(
   useLaserEvt = false;
   useBeamEvt = true;
   useGPSEvt = false;
-
-#ifndef NO_GENIE      
-  genierecordval = new genie::NtpMCEventRecord;
-#endif
 }
 
 WCSimPrimaryGeneratorAction::~WCSimPrimaryGeneratorAction()
@@ -126,10 +114,9 @@ WCSimPrimaryGeneratorAction::~WCSimPrimaryGeneratorAction()
       metadata->ResetBranchAddresses();
       delete inputdata;
       delete metadata;
-#ifndef NO_GENIE
-      if(geniedata) geniedata->ResetBranchAddresses();
-      if(geniedata) delete geniedata;
-      if(genierecordval) delete genierecordval;
+#ifndef NO_NUIS
+      if(nuisancedata) nuisancedata->ResetBranchAddresses();
+      if(nuisancedata) delete nuisancedata;
 #endif
     }
   }
@@ -425,13 +412,49 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			inputdata->SetBranchAddress("nuvtxt",&nuvtxtval,&nuvtxtBranch);
 			inputdata->SetBranchAddress("vtxvol",&nupvval,&nuPVBranch);
 			inputdata->SetBranchAddress("vtxmat",&numatval,&nuvtxmatBranch);
-			inputdata->SetBranchAddress("entry",&genieentrybranchval,&genieentryBranch);
+			inputdata->SetBranchAddress("entry",&nuisanceentrybranchval,&nuisanceentryBranch);
 			metadata->SetBranchAddress("inputFluxName",&nufluxfilenameval,&nufluxfilenameBranch);
-#ifndef NO_GENIE
-			geniedata->SetBranchAddress("gmcrec",&genierecordval,&genierecordBranch);
-			genierecordBranch->SetAutoDelete(kTRUE);
+#ifndef NO_NUIS
+			nuisancedata->SetBranchAddress("Mode",&nuisancemodeval,&nuisancemodeBranch);
+			nuisancedata->SetBranchAddress("ninitp",&nuisanceninitpval,&nuisanceninitpBranch);
+			nuisancedata->SetBranchAddress("vtxx",&nuisancevtxxval,&nuisancevtxxBranch);
+			nuisancedata->SetBranchAddress("vtxy",&nuisancevtxyval,&nuisancevtxyBranch);
+			nuisancedata->SetBranchAddress("vtxz",&nuisancevtxzval,&nuisancevtxzBranch);
+			nuisancedata->SetBranchAddress("PDGnu",&nuisancenupdgval,&nuisancenupdgBranch);
+			nuisancedata->SetBranchAddress("Enu_true",&nuisancenueval,&nuisancenueBranch);
+			nuisancedata->SetBranchAddress("px_init",&nuisancepxval,&nuisancepxBranch);
+			nuisancedata->SetBranchAddress("py_init",&nuisancepyval,&nuisancepyBranch);
+			nuisancedata->SetBranchAddress("pz_init",&nuisancepzval,&nuisancepzBranch);
+			nuisancedata->SetBranchAddress("tgt",&nuisancetgtpdgval,&nuisancetgtpdgBranch);
+			nuisancedata->SetBranchAddress("E_init",&nuisanceEval,&nuisanceEBranch);
+			nuisancedata->SetBranchAddress("pdg_init",&nuisancepdgval,&nuisancepdgBranch);
+			nuisancemodeBranch->SetAutoDelete(kTRUE);
+			nuisanceninitpBranch->SetAutoDelete(kTRUE);
+			nuisancevtxxBranch->SetAutoDelete(kTRUE);
+			nuisancevtxyBranch->SetAutoDelete(kTRUE);
+			nuisancevtxzBranch->SetAutoDelete(kTRUE);
+			nuisancenupdgBranch->SetAutoDelete(kTRUE);
+			nuisancenueBranch->SetAutoDelete(kTRUE);
+			nuisancepxBranch->SetAutoDelete(kTRUE);
+			nuisancepyBranch->SetAutoDelete(kTRUE);
+			nuisancepzBranch->SetAutoDelete(kTRUE);
+			nuisancetgtpdgBranch->SetAutoDelete(kTRUE);
+			nuisanceEBranch->SetAutoDelete(kTRUE);
+			nuisancepdgBranch->SetAutoDelete(kTRUE);
 #else
-			genierecordBranch=(TBranch*)1;
+			nuisancemodeBranch=(TBranch*)1;
+			nuisanceninitpBranch=(TBranch*)1;
+			nuisancevtxxBranch=(TBranch*)1;
+			nuisancevtxyBranch=(TBranch*)1;
+			nuisancevtxzBranch=(TBranch*)1;
+			nuisancenupdgBranch=(TBranch*)1;
+			nuisancenueBranch=(TBranch*)1;
+			nuisancepxBranch=(TBranch*)1;
+			nuisancepyBranch=(TBranch*)1;
+			nuisancepzBranch=(TBranch*)1;
+			nuisancetgtpdgBranch=(TBranch*)1;
+			nuisanceEBranch=(TBranch*)1;
+			nuisancepdgBranch=(TBranch*)1;
 #endif
 			vtxxBranch=inputdata->GetBranch("vx");
 			vtxyBranch=inputdata->GetBranch("vy");
@@ -445,7 +468,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			pdgBranch=inputdata->GetBranch("pdgtank");
 			nuprimaryBranch=inputdata->GetBranch("primary");
 		
-			if(runBranch==0||nTankBranch==0||vtxxBranch==0||vtxyBranch==0||vtxzBranch==0||vtxtBranch==0||pxBranch==0||pyBranch==0||pzBranch==0||EBranch==0||KEBranch==0||pdgBranch==0||nupdgBranch==0||nuvtxxBranch==0||nuvtxyBranch==0||nuvtxzBranch==0||nuvtxtBranch==0||nuPVBranch==0||nuvtxmatBranch==0||nuprimaryBranch==0||nufluxfilenameBranch==0||genierecordBranch==0){
+			if(runBranch==0||nTankBranch==0||vtxxBranch==0||vtxyBranch==0||vtxzBranch==0||vtxtBranch==0||pxBranch==0||pyBranch==0||pzBranch==0||EBranch==0||KEBranch==0||pdgBranch==0||nupdgBranch==0||nuvtxxBranch==0||nuvtxyBranch==0||nuvtxzBranch==0||nuvtxtBranch==0||nuPVBranch==0||nuvtxmatBranch==0||nuprimaryBranch==0||nufluxfilenameBranch==0||nuisancemodeBranch==0||nuisanceninitpBranch==0||nuisancevtxxBranch==0||nuisancevtxyBranch==0||nuisancevtxzBranch==0||nuisancenupdgBranch==0||nuisancenueBranch==0||nuisancepxBranch==0||nuisancepyBranch==0||nuisancepzBranch==0||nuisancetgtpdgBranch==0||nuisanceEBranch==0||nuisancepdgBranch==0){
 				G4cout<<"BRANCHES ARE ZOMBIES ARGH!"<<G4endl;
 			} else { G4cout<<"entries in this tree: "<<vtxxBranch->GetEntries()<<G4endl; }
 			
@@ -465,13 +488,13 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		nuvtxtBranch->GetEntry(localEntry);
 		nuPVBranch->GetEntry(localEntry);
 		nuvtxmatBranch->GetEntry(localEntry);
-		genieentryBranch->GetEntry(localEntry);
+		nuisanceentryBranch->GetEntry(localEntry);
 		nufluxfilenameBranch->GetEntry(nextTreeNumber);
 		
 		// note info about this input event for recording into output file
 		dirtEntryNum = localEntry;
-		genieEntryNum = genieentrybranchval;
-		genieFileName = nufluxfilenameval;
+		nuisanceEntryNum = nuisanceentrybranchval;
+		nuisanceFileName = nufluxfilenameval;
 		
 #ifdef ONLY_TANK_EVENTS
 		if(strcmp(numatval,"TankWater")!=0){ // nu intx not in tank
@@ -489,19 +512,32 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		}
 #endif
 
-#ifndef NO_GENIE		
-		Long64_t genielocalEntry = geniedata->LoadTree(genieentrybranchval);
-		// load the appropriate genie entry. we assume 1:1 correspondance of genie:g4dirt files.
+#ifndef NO_NUIS		
+		Long64_t nuisancelocalEntry = nuisancedata->LoadTree(nuisanceentrybranchval);
+		// load the appropriate nuisance entry. we assume 1:1 correspondance of nuisance:g4dirt files.
 		// So the following should not be necessary, as the files should be loaded synchronously
-		if(genielocalEntry<0){
+		if(nuisancelocalEntry<0){
 			// get the pointer to the UI manager
 			G4UImanager* UI = G4UImanager::GetUIpointer();
 			UI->ApplyCommand("/run/abort 1");	// abort after processing current event
 			G4cout<<"@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#"<<G4endl;
-			G4cout<<"@#@#@#@#@#@#@#@#@#@ REACHED END OF GENIE FILE! #@#@#@#@#@#@#@#@#@#@#@#"<<G4endl;
+			G4cout<<"@#@#@#@#@#@#@#@#@#@ REACHED END OF NUISANCE FILE! #@#@#@#@#@#@#@#@#@#@#@#"<<G4endl;
 			G4cout<<"@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#"<<G4endl;
 		}
-		genierecordBranch->GetEntry(genieentrybranchval);
+		//is below necessary??
+		nuisancemodeBranch->GetEntry(nuisanceentrybranchval);
+		nuisanceninitpBranch->GetEntry(nuisanceentrybranchval);
+		nuisancevtxxBranch->GetEntry(nuisanceentrybranchval);
+		nuisancevtxyBranch->GetEntry(nuisanceentrybranchval);
+		nuisancevtxzBranch->GetEntry(nuisanceentrybranchval);
+		nuisancenupdgBranch->GetEntry(nuisanceentrybranchval);
+		nuisancenueBranch->GetEntry(nuisanceentrybranchval);
+		nuisancepxBranch->GetEntry(nuisanceentrybranchval);
+		nuisancepyBranch->GetEntry(nuisanceentrybranchval);
+		nuisancepzBranch->GetEntry(nuisanceentrybranchval);
+		nuisancetgtpdgBranch->GetEntry(nuisanceentrybranchval);
+		nuisanceEBranch->GetEntry(nuisanceentrybranchval);
+		nuisancepdgBranch->GetEntry(nuisanceentrybranchval);
 #endif
 		
 		G4ParticleDefinition* parttype = particleTable->FindParticle(nupdgval);
@@ -571,8 +607,8 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		for(int i=0;i<ntankbranchval;i++){
 			if(nuprimarybranchval[i]==1){ primariesinthisentry=true; break; }
 		}
-		if(!primariesinthisentry){ // not genie primaries... (this shouldn't happen)
-			G4cout<<"---------------SKIPPING ENTRY WITH NO GENIE PRIMARIES----------------"<<G4endl;
+		if(!primariesinthisentry){ // not nuisance primaries... (this shouldn't happen)
+			G4cout<<"---------------SKIPPING ENTRY WITH NO NUISANCE PRIMARIES----------------"<<G4endl;
 			inputEntry++;
 			localEntry = inputdata->LoadTree(inputEntry);
 			if(localEntry<0){
@@ -605,65 +641,70 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			} else { goto loadbeamentry; } // load the next entry
 		}
 #endif
-		// First the genie information (largely unused as not currently stored in wcsim output)
+		// First the nuisance information (largely unused as not currently stored in wcsim output)
 		// ===========================
-#ifndef NO_GENIE
-		// genie information available: (not all is currently stored)
-		genie::EventRecord* gevtRec = genierecordval->event;
-		genie::Interaction* genieint = gevtRec->Summary();
+#ifndef NO_NUIS
+		// nuisance information available: (not all is currently stored)
 		// we write files with v2_8_6, but read with v2_12_0, so /*V*/ indicates reading is validated
 	
 		// process information:
-//		TString procinfostring = genieint->ProcInfo().AsString();
-//		TString scatteringtypestring = genieint->ScatteringTypeAsString();
-//		TString interactiontypestring = genieint->InteractionTypeAsString();
+//		TString procinfostring = nuisanceint->ProcInfo().AsString();
+//		TString scatteringtypestring = nuisanceint->ScatteringTypeAsString();
+//		TString interactiontypestring = nuisanceint->InteractionTypeAsString();
 //		Bool_t isQE = interaction.ProcInfo().IsQuasiElastic();
-//		Double_t neutrinoq2 = genieint->Kine().Q2();
+//		Double_t neutrinoq2 = nuisanceint->Kine().Q2();
 //		TLorentzVector& k1 = *(gevtRec->Probe()->P4());
 //		TLorentzVector& k2 = *(gevtRec->FinalStatePrimaryLepton()->P4());
 //		Double_t costhfsl = TMath::Cos( k2.Vect().Angle(k1.Vect()) );
-//		TLorentzVector* genieVtx = gevtRec->Vertex();
-//		G4double x = genieVtx->X() * m;         // same info as nuvtx in g4dirt file
-//		G4double y = genieVtx->Y() * m;         // GENIE uses meters
-//		G4double z = genieVtx->Z() * m;         // GENIE uses meters
-//		G4double t = genieVtx->T() * second;    // GENIE uses seconds for time
-		Int_t neutinteractioncode = genie::utils::ghep::NeutReactionCode(gevtRec); /*V*/
-//		Int_t nuanceinteractioncode  = genie::utils::ghep::NuanceReactionCode(gevtRec);
+//		TLorentzVector* nuisanceVtx = gevtRec->Vertex();
+//		G4double x = nuisanceVtx->X() * m;         // same info as nuvtx in g4dirt file
+//		G4double y = nuisanceVtx->Y() * m;         // NUISANCE uses meters
+//		G4double z = nuisanceVtx->Z() * m;         // NUISANCE uses meters
+//		G4double t = nuisanceVtx->T() * second;    // NUISANCE uses seconds for time
+		Int_t neutinteractioncode = nuisancemodeval; /*V*/
+//		Int_t nuanceinteractioncode  = nuisance::utils::ghep::NuanceReactionCode(gevtRec);
 		
 		// neutrino information:
-		Double_t probeenergy = genieint->InitState().ProbeE(genie::kRfLab) * GeV;  /*V*/
-//		TSring probepartname = genieint->InitState().Probe()->GetName();
-		Int_t probepdg = genieint->InitState().Probe()->PdgCode();                 /*V*/
-		TLorentzVector* probemomentum = gevtRec->Probe()->P4();                    /*V*/
-		TVector3 probethreemomentum = probemomentum->Vect();
-		TVector3 probemomentumdir = probethreemomentum.Unit();
-		// n.b.  genieint->InitState().Probe != gevtRec->Probe()
+		Double_t probeenergy = nuisancenueval * GeV;  /*V*/
+//		TSring probepartname = nuisanceint->InitState().Probe()->GetName();
+		Int_t probepdg = nuisancenupdgval;                 /*V*/
+
+		G4ThreeVector probethreemomentum(0.,0.,0.);
+		G4ThreeVector probemomentumdir(0.,0.,0.);
+		// n.b.  nuisanceint->InitState().Probe != gevtRec->Probe()
 		
 		// target nucleon:
-//		int targetnucleonpdg = genieint->InitState().Tgt().HitNucPdg();
+//		int targetnucleonpdg = nuisanceint->InitState().Tgt().HitNucPdg();
 //		TString targetnucleonname;
-//		if ( genie::pdg::IsNeutronOrProton(targetnucleonpdg) ) {
-//			TParticlePDG * p = genie::PDGLibrary::Instance()->Find(targetnucleonpdg);
+//		if ( nuisance::pdg::IsNeutronOrProton(targetnucleonpdg) ) {
+//			TParticlePDG * p = nuisance::PDGLibrary::Instance()->Find(targetnucleonpdg);
 //			targetnucleonname = p->GetName();
 //		} else {
 //			targetnucleonname = targetnucleonpdg;
 //		}
-		TLorentzVector* targetnucleonmomentum=0;
-		TVector3 targetnucleonthreemomentum(0.,0.,0.);
+		G4ThreeVector targetnucleonthreemomentum(0.,0.,0.);
 		Double_t targetnucleonenergy =0;
-		if(gevtRec->HitNucleon()){
-			targetnucleonmomentum = gevtRec->HitNucleon()->P4();               /*V*/
-			targetnucleonthreemomentum = targetnucleonmomentum->Vect();
-			targetnucleonenergy = targetnucleonmomentum->Energy() * GeV;
+
+		//probe neutrino should ALWAYS come first in _init arrays
+		for(int i = 0; i < nuisanceninitpval; i++){
+			if(nuisancepdgval[i] == nuisancenupdgval){
+				probethreemomentum = G4ThreeVector(nuisancepxval[i],nuisancepyval[i],nuisancepzval[i]);
+				probemomentumdir = probethreemomentum.unit();
+				continue;
+			}
+			if(nuisancepdgval[i] == 2212 || nuisancepdgval[i] == 2112){
+				targetnucleonthreemomentum = G4ThreeVector(nuisancepxval[i],nuisancepyval[i],nuisancepzval[i]);
+				targetnucleonenergy = nuisanceEval[i] * GeV;
+				break;
+			}
 		}
-		
 		// target nucleus:
-		Int_t targetnucleuspdg = genieint->InitState().Tgt().Pdg();                /*V*/
-//		TParticlePDG * targetnucleus = genie::PDGLibrary::Instance()->Find( targetnucleuspdg );
+		Int_t targetnucleuspdg = nuisancetgtpdgval;                /*V*/
+//		TParticlePDG * targetnucleus = nuisance::PDGLibrary::Instance()->Find( targetnucleuspdg );
 //		TString targetnucleusname = "unknown";
 //		if(targetnucleus){ targetnucleusname = nucleartarget->GetName(); }
-//		Int_t targetnucleusZ = genieint->InitState().Tgt().Z();
-//		Int_t targetnucleusA = genieint->InitState().Tgt().A();
+//		Int_t targetnucleusZ = nuisanceint->InitState().Tgt().Z();
+//		Int_t targetnucleusA = nuisanceint->InitState().Tgt().A();
 	
 		// remnant nucleus:
 //		int remnucpos = gevtRec->RemnantNucleusPosition(); 
@@ -684,11 +725,11 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //		}
 	
 		// other remnants:
-//		Int_t numfsprotons = genieint->ExclTag().NProtons();
-//		Int_t numfsneutrons = genieint->ExclTag().NNeutrons();
-//		Int_t numfspi0 = genieint->ExclTag().NPi0();
-//		Int_t numfspiplus = genieint->ExclTag().NPiPlus();
-//		Int_t numfspiminus = genieint->ExclTag().NPiMinus();
+//		Int_t numfsprotons = nuisanceint->ExclTag().NProtons();
+//		Int_t numfsneutrons = nuisanceint->ExclTag().NNeutrons();
+//		Int_t numfspi0 = nuisanceint->ExclTag().NPi0();
+//		Int_t numfspiplus = nuisanceint->ExclTag().NPiPlus();
+//		Int_t numfspiminus = nuisanceint->ExclTag().NPiMinus();
 		
 		//  The following information is retrieved from the PrimaryGeneratorAction in EndOfEventAction:
 		//  For each neutrino vertex, the neutrino, target, + any nue, gamma and e daughters are stored.
@@ -707,30 +748,24 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		//	targetdirs[nvtxs]      // momentum direction unit vector of target
 		///////////////////////
 		
-		vecRecNumber = genieentrybranchval;
+		vecRecNumber = nuisanceentrybranchval;
 		mode = neutinteractioncode;
 		nvtxs = 1;
-		npar = -1;                                              // ? not used.
+		npar = nuisanceninitpval;
 		for(int i=0; i<nvtxs; i++){                             // we only ever have 1 neutrino intx
 			vtxsvol[i] = -10;                                   // looked up in EndOfEventAction
-			// neutrino vertices are stored in m not cm
-			vtxs[i] = G4ThreeVector(nuvtxxval*CLHEP::m, nuvtxyval*CLHEP::m, nuvtxzval*CLHEP::m);
+			// neutrino vertices are stored in cm
+			vtxs[i] = G4ThreeVector(nuisancevtxxval*CLHEP::cm, nuisancevtxyval*CLHEP::cm, nuisancevtxzval*CLHEP::cm);
 			beampdgs[i] = probepdg;
 			beamenergies[i] = probeenergy;
 			targetpdgs[i] = targetnucleuspdg;
 			targetenergies[i] = targetnucleonenergy;
-			G4ThreeVector probemomdir;                          // convert TVector3 to G4ThreeVector
-			G4ThreeVector targetnucleonmomdir;
-			for(int comp=0; comp<2; comp++){
-				probemomdir[comp] = probemomentumdir[comp];
-				targetnucleonmomdir[comp] = targetnucleonthreemomentum.Unit()[comp];
-			}
-			beamdirs[i] = probemomdir;
-			targetdirs[i] = targetnucleonmomdir;
+			beamdirs[i] = probemomentumdir;
+			targetdirs[i] = targetnucleonthreemomentum.unit();
 		}
 #else
-		// without genie we don't have the primary interaction information....
-		vecRecNumber = genieentrybranchval;
+		// without nuisance we don't have the primary interaction information....
+		vecRecNumber = nuisanceentrybranchval;
 		mode = -999;
 		nvtxs = 1;
 		npar = -1;                                              // ? not used.
@@ -808,7 +843,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 					continue;
 				}
 			}
-			if(nuprimaryval==1){G4cout<<"genie primary ";} else {G4cout<<"genie secondary ";}
+			if(nuprimaryval==1){G4cout<<"nuisance primary ";} else {G4cout<<"nuisance secondary ";}
 			G4cout<<keval/GeV<<" GeV ";
 			if(parttype==0){G4cout<<"PDG: "<<pdgval;} else {G4cout<<parttype->GetParticleName();}
 			G4Navigator* theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
@@ -817,7 +852,7 @@ void WCSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			
 			particleGun->SetParticleEnergy(keval);       // !!!kinetic!!! energy
 			particleGun->SetParticlePosition(thevtx);
-			particleGun->SetParticleTime(vtxtval);       // propagate entry time from upstream GENIE (t=0 at protons on target)
+			particleGun->SetParticleTime(vtxtval);       // propagate entry time from upstream NUISANCE (t=0 at protons on target)
 			particleGun->SetParticleMomentumDirection(thepdir);
 			particleGun->GeneratePrimaryVertex(anEvent); //anEvent provided by G4 when invoking the method
 			//G4cout<<"Vertex set"<<G4endl;
@@ -959,11 +994,11 @@ void WCSimPrimaryGeneratorAction::LoadNewPrimaries(){
 	metadata = new TChain("tankmeta");
 	metadata->Add(primariesDirectory);
 	metadata->LoadTree(0);
-#ifndef NO_GENIE
-	if(geniedata){ geniedata->ResetBranchAddresses(); delete geniedata; }
-	geniedata = new TChain("gtree");
-	geniedata->Add(neutrinosDirectory);
-	geniedata->LoadTree(0);
+#ifndef NO_NUIS
+	if(nuisancedata){ nuisancedata->ResetBranchAddresses(); delete nuisancedata; }
+	nuisancedata = new TChain("FlatTree_VARS");
+	nuisancedata->Add(neutrinosDirectory);
+	nuisancedata->LoadTree(0);
 #endif
 	
 	inputdata->SetBranchAddress("run",&runbranchval,&runBranch);
@@ -975,12 +1010,37 @@ void WCSimPrimaryGeneratorAction::LoadNewPrimaries(){
 	inputdata->SetBranchAddress("nuvtxt",&nuvtxtval,&nuvtxtBranch);
 	inputdata->SetBranchAddress("vtxvol",&nupvval,&nuPVBranch);
 	inputdata->SetBranchAddress("vtxmat",&numatval,&nuvtxmatBranch);
-	inputdata->SetBranchAddress("entry",&genieentrybranchval,&genieentryBranch);
+	inputdata->SetBranchAddress("entry",&nuisanceentrybranchval,&nuisanceentryBranch);
 	metadata->SetBranchAddress("inputFluxName",&nufluxfilenameval,&nufluxfilenameBranch);
-#ifndef NO_GENIE
-	geniedata->SetBranchAddress("gmcrec",&genierecordval,&genierecordBranch);
+#ifndef NO_NUIS
+
+	nuisancedata->SetBranchAddress("Mode",&nuisancemodeval,&nuisancemodeBranch);
+	nuisancedata->SetBranchAddress("ninitp",&nuisanceninitpval,&nuisanceninitpBranch);
+	nuisancedata->SetBranchAddress("vtxx",&nuisancevtxxval,&nuisancevtxxBranch);
+	nuisancedata->SetBranchAddress("vtxy",&nuisancevtxyval,&nuisancevtxyBranch);
+	nuisancedata->SetBranchAddress("vtxz",&nuisancevtxzval,&nuisancevtxzBranch);
+	nuisancedata->SetBranchAddress("PDGnu",&nuisancenupdgval,&nuisancenupdgBranch);
+	nuisancedata->SetBranchAddress("Enu_true",&nuisancenueval,&nuisancenueBranch);
+	nuisancedata->SetBranchAddress("px_init",&nuisancepxval,&nuisancepxBranch);
+	nuisancedata->SetBranchAddress("py_init",&nuisancepyval,&nuisancepyBranch);
+	nuisancedata->SetBranchAddress("pz_init",&nuisancepzval,&nuisancepzBranch);
+	nuisancedata->SetBranchAddress("tgt",&nuisancetgtpdgval,&nuisancetgtpdgBranch);
+	nuisancedata->SetBranchAddress("E_init",&nuisanceEval,&nuisanceEBranch);
+	nuisancedata->SetBranchAddress("pdg_init",&nuisancepdgval,&nuisancepdgBranch);
 #else
-	genierecordBranch=(TBranch*)1;
+	nuisancemodeBranch=(TBranch*)1;
+	nuisanceninitpBranch=(TBranch*)1;
+	nuisancevtxxBranch=(TBranch*)1;
+	nuisancevtxyBranch=(TBranch*)1;
+	nuisancevtxzBranch=(TBranch*)1;
+	nuisancenupdgBranch=(TBranch*)1;
+	nuisancenueBranch=(TBranch*)1;
+	nuisancepxBranch=(TBranch*)1;
+	nuisancepyBranch=(TBranch*)1;
+	nuisancepzBranch=(TBranch*)1;
+	nuisancetgtpdgBranch=(TBranch*)1;
+	nuisanceEBranch=(TBranch*)1;
+	nuisancepdgBranch=(TBranch*)1;
 #endif
 	
 	vtxxBranch=inputdata->GetBranch("vx");
@@ -995,7 +1055,7 @@ void WCSimPrimaryGeneratorAction::LoadNewPrimaries(){
 	pdgBranch=inputdata->GetBranch("pdgtank");
 	nuprimaryBranch=inputdata->GetBranch("primary");
 	
-	if(runBranch==0||nTankBranch==0||vtxxBranch==0||vtxyBranch==0||vtxzBranch==0||vtxtBranch==0||pxBranch==0||pyBranch==0||pzBranch==0||EBranch==0||KEBranch==0||pdgBranch==0||nupdgBranch==0||nuvtxxBranch==0||nuvtxyBranch==0||nuvtxzBranch==0||nuvtxtBranch==0||nuPVBranch==0||nuvtxmatBranch==0||nuprimaryBranch==0 || nufluxfilenameBranch==0||genierecordBranch==0){
+	if(runBranch==0||nTankBranch==0||vtxxBranch==0||vtxyBranch==0||vtxzBranch==0||vtxtBranch==0||pxBranch==0||pyBranch==0||pzBranch==0||EBranch==0||KEBranch==0||pdgBranch==0||nupdgBranch==0||nuvtxxBranch==0||nuvtxyBranch==0||nuvtxzBranch==0||nuvtxtBranch==0||nuPVBranch==0||nuvtxmatBranch==0||nuprimaryBranch==0||nufluxfilenameBranch==0||nuisancemodeBranch==0||nuisanceninitpBranch==0||nuisancevtxxBranch==0||nuisancevtxyBranch==0||nuisancevtxzBranch==0||nuisancenupdgBranch==0||nuisancenueBranch==0||nuisancepxBranch==0||nuisancepyBranch==0||nuisancepzBranch==0||nuisancetgtpdgBranch==0||nuisanceEBranch==0||nuisancepdgBranch==0){
 		G4cout<<"BRANCHES ARE ZOMBIES ARGH!"<<G4endl;
 	}
 	

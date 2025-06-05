@@ -32,7 +32,7 @@ WCSimPrimaryGeneratorMessenger::WCSimPrimaryGeneratorMessenger(WCSimPrimaryGener
   primariesfileDirectoryCmd->SetDefaultValue("");
   
   neutrinosfileDirectoryCmd = new G4UIcmdWithAString("/mygen/neutrinosdirectory", this);
-  neutrinosfileDirectoryCmd->SetGuidance("Specify the directory containing genie neutrino root files. Set this before setting the primariesDirectory. Both should be set at the same time.");
+  neutrinosfileDirectoryCmd->SetGuidance("Specify the directory containing nuisance neutrino root files. Set this before setting the primariesDirectory. Both should be set at the same time.");
   neutrinosfileDirectoryCmd->SetParameterName("directoryName",true);
   neutrinosfileDirectoryCmd->SetDefaultValue("");
 

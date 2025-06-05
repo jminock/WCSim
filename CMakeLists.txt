@@ -17,11 +17,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fdiagnostics-color=always -std=c++1y
 if(DEFINED ENV{GEANT4_10_2})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGEANT4_10_2")
 endif()
-if(DEFINED ENV{NO_GENIE})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_GENIE")
-  message(STATUS "GENIE features disabled.")
+if(DEFINED ENV{NO_NUIS})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_NUIS")
+  message(STATUS "NUISANCE features disabled.")
 else()
-  message(STATUS "GENIE features enabled.")
+  message(STATUS "NUISANCE features enabled.")
 endif()
 # pass sourcefile directory
 add_definitions("-DWCSIMDIR=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
@@ -46,44 +46,37 @@ endif()
 
 ## Load macros: need to compile ROOT through cmake first and execute bin/thisroot.sh
 include(${ROOT_USE_FILE})
-if(NOT DEFINED ENV{NO_GENIE})
+if(NOT DEFINED ENV{NO_NUIS})
 #----------------------------------------------------------------------------
 # GENIE stuff
 #
 
 #find_package(CLHEP REQUIRED)
 
-set(_root_internal_libraries
+#set(_root_internal_libraries
     # for GENIE
-    Geom
-    EGPythia6
-    GenVector
-)
-set(Root_LIBRARIES ${_root_internal_libraries})
+#    Geom
+#    EGPythia6
+#    GenVector
+#)
+#set(Root_LIBRARIES ${_root_internal_libraries})
 
-link_directories($ENV{ROOTSYS}/lib)
+#link_directories($ENV{ROOTSYS}/lib)
 
-include_directories($ENV{GENIE}/include/GENIE)
-link_directories($ENV{GENIE}/lib)
+#include_directories($ENV{LOG4CPP_FQ_DIR}/include)
+#link_directories($ENV{LOG4CPP_FQ_DIR}/lib)
+#set(_log4cpp_internal_libraries log4cpp)
 
-set(_genie_internal_libraries
-    GFwAlg GFwUtl GPhDfrcEG GPhIBDXS GPhQELXS GFwEG GPhAMNGEG GPhDfrcXS GPhMEL GPhResEG GFwGHEP GPhAMNGXS GPhDISEG GPhMNucEG GPhResXS GFwInt GPhChmXS GPhDISXS GPhMNucXS GPhStrEG GFwMsg GPhCmn GPhGlwResEG GPhNuclSt GPhStrXS GFwNtp GPhCohEG GPhGlwResXS GPhNuElEG GPhXSIg GFwNum GPhCohXS GPhHadnz GPhNuElXS GTlFlx GFwParDat GPhDcy GPhHadTransp GPhPDF GTlGeo GFwReg GPhDeEx GPhIBDEG GPhQELEG
-)
-
-include_directories($ENV{LOG4CPP_FQ_DIR}/include)
-link_directories($ENV{LOG4CPP_FQ_DIR}/lib)
-set(_log4cpp_internal_libraries log4cpp)
-
-include_directories($ENV{XERCESCROOT}/include)
-link_directories($ENV{XERCESCROOT}/lib)
-link_directories($ENV{LIBXML2ROOT}/lib)
-set(_xerces_internal_libraries xerces-c xml2)
+#include_directories($ENV{XERCESCROOT}/include)
+#link_directories($ENV{XERCESCROOT}/lib)
+#link_directories($ENV{LIBXML2ROOT}/lib)
+#set(_xerces_internal_libraries xerces-c xml2)
 
 #include_directories($ENV{ROOTSYS}/include)
-link_directories($ENV{ROOTSYS}/lib)
+#link_directories($ENV{ROOTSYS}/lib)
 #include_directories($ENV{GEANT4_FQ_DIR}/include)
 
-set(Genie_LIBRARIES ${_genie_internal_libraries} ${_log4cpp_internal_libraries} ${_xerces_internal_libraries} )
+#set(Genie_LIBRARIES ${_genie_internal_libraries} ${_log4cpp_internal_libraries} ${_xerces_internal_libraries} )
 endif()
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
@@ -184,7 +177,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(WCSim WCSim.cc ${sources} ${headers})
-target_link_libraries(WCSim ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${Genie_LIBRARIES} ${Root_LIBRARIES} WCSimRoot Tree ${cadmesh_LIBRARIES})
+target_link_libraries(WCSim ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${Root_LIBRARIES} WCSimRoot Tree ${cadmesh_LIBRARIES})
 
 
 
@@ -205,7 +198,7 @@ set(WCSIM_SCRIPTS
   macros/setRandomParameters.mac
   pulsecharacteristics.root
   PHASE2_INNER_STRUCTURE.gdml
-  geniedirectory.txt
+  nuisancedirectory.txt
   dirtdirectory.txt
   WCSimVersion.txt
   PMTPositions_Scan_Glass.txt
