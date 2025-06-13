@@ -52,9 +52,9 @@ public:
   G4ThreeVector GetTargetDir(G4int n = 0) {return targetdirs[n];};
   // ANNIE: trace upstream sources
   G4String  GetDirtFileName(){return dirtFileName;}
-  G4String GetNuisanceFileName(){return nuisanceFileName;}
+  G4String GetGenieFileName(){return nuisanceFileName;}
   G4int    GetDirtEntryNum(){return dirtEntryNum;}
-  G4int   GetNuisanceEntryNum(){return nuisanceEntryNum;}
+  G4int   GetGenieEntryNum(){return nuisanceEntryNum;}
 
   // older ...
   G4double GetNuEnergy() {return nuEnergy;};

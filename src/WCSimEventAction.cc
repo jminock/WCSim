@@ -1287,14 +1287,14 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
 
   // add the information about upstream source
   G4String      dirtFileName = generatorAction->GetDirtFileName();
-  G4String     nuisanceFileName = generatorAction->GetNuisanceFileName();
+  G4String     nuisanceFileName = generatorAction->GetGenieFileName();
   G4int      dirtEventNumber = generatorAction->GetDirtEntryNum();
-  G4int     nuisanceEventNumber = generatorAction->GetNuisanceEntryNum();
+  G4int     nuisanceEventNumber = generatorAction->GetGenieEntryNum();
   WCSimRootEventHeader* theheader = wcsimrootevent->GetHeader();
   theheader->SetDirtFileName(dirtDirectory+"/"+dirtFileName);
-  theheader->SetNuisanceFileName(nuisanceDirectory+"/"+nuisanceFileName);
+  theheader->SetGenieFileName(nuisanceDirectory+"/"+nuisanceFileName);
   theheader->SetDirtEntryNum(dirtEventNumber);
-  theheader->SetNuisanceEntryNum(nuisanceEventNumber);
+  theheader->SetGenieEntryNum(nuisanceEventNumber);
 
   G4Event *event = G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
   WCSimEventInformation *evInfo = dynamic_cast<WCSimEventInformation*>(event->GetUserInformation());

@@ -201,18 +201,18 @@ public:
   void   Set(Int_t i, Int_t r, Int_t d, Int_t s=1) { fEvtNum = i; fRun = r; fDate = d; fSubEvtNumber = s;}
   void   SetDate(Int_t d) { fDate=d; }
   void   SetDirtFileName(TString namein){ fDirtFileName = namein; }
-  void   SetNuisanceFileName(TString namein){ fNuisanceFileName = namein; }
+  void   SetGenieFileName(TString namein){ fNuisanceFileName = namein; }
   void   SetDirtEntryNum(Int_t numin){ fDirtEntryNum = numin; }
-  void   SetNuisanceEntryNum(Int_t numin){ fNuisanceEntryNum = numin; }
+  void   SetGenieEntryNum(Int_t numin){ fNuisanceEntryNum = numin; }
   
    Int_t  GetEvtNum() const { return fEvtNum; }
    Int_t  GetRun() const { return fRun; }
    Int_t  GetDate() const { return fDate; }
    Int_t GetSubEvtNumber() const { return fSubEvtNumber;}
    TString GetDirtFileName() const { return fDirtFileName; }
-   TString GetNuisanceFileName() const { return fNuisanceFileName; }
+   TString GetGenieFileName() const { return fNuisanceFileName; }
    Int_t GetDirtEntryNum() const { return fDirtEntryNum; }
-   Int_t GetNuisanceEntryNum() const { return fNuisanceEntryNum; }
+   Int_t GetGenieEntryNum() const { return fNuisanceEntryNum; }
   
 
    ClassDef(WCSimRootEventHeader,2)  //WCSimRootEvent Header
