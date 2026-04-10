@@ -20,6 +20,8 @@
 #include "Framework/Interaction/Interaction.h"
 #endif
 #include "WCSimRootOptions.hh"
+#include "G4ThreeVector.hh"
+
 
 class WCSimDetectorConstruction;
 class G4ParticleGun;
@@ -27,6 +29,9 @@ class G4GeneralParticleSource;
 class G4Event;
 class WCSimPrimaryGeneratorMessenger;
 class G4Generator;
+
+class WCSimAmBePrimaryReader;
+
 
 class WCSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -77,6 +82,12 @@ public:
   G4String GetGeneratorTypeString();
   
   void SaveOptionsToOutput(WCSimRootOptions * wcopt);
+
+
+  // For AmBe source sim
+  G4bool OpenAmBePrimaryFile(const G4String& fileName);
+  void SetAmBePositionOffset(const G4ThreeVector& v) { amBePositionOffset = v; }
+  G4ThreeVector GetAmBePositionOffset() const { return amBePositionOffset; }
 
 private:
   WCSimDetectorConstruction*      myDetector;
@@ -140,7 +151,12 @@ private:
 	G4String neutrinosDirectory;
 	G4bool loadNewPrimaries;
 	G4int primariesoffset;
-	
+
+    // AmBe external ROOT-input mode
+  G4bool useAmBeRootInput;
+  G4String amBeInputFileName;
+  WCSimAmBePrimaryReader* amBeReader;
+  G4ThreeVector amBePositionOffset;
 public:
 
   inline void SetMulineEvtGenerator(G4bool choice) { useMulineEvt = choice; }
@@ -158,6 +174,12 @@ public:
 
   inline void SetGPSEvtGenerator(G4bool choice) { useGPSEvt = choice; }
   inline G4bool IsUsingGPSEvtGenerator()  { return useGPSEvt; }
+
+  inline void SetAmBeRootGenerator(G4bool choice) { useAmBeRootInput = choice; }
+  inline G4bool IsUsingAmBeRootGenerator() const { return useAmBeRootInput; }
+
+  inline void SetAmBeInputFileName(const G4String& fileName) { amBeInputFileName = fileName; }
+  inline G4String GetAmBeInputFileName() const { return amBeInputFileName; }
 
   inline void OpenVectorFile(G4String fileName) 
   {
