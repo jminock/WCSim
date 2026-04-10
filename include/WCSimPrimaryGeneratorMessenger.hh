@@ -5,6 +5,7 @@ class WCSimPrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWith3VectorAndUnit;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -29,6 +30,10 @@ class WCSimPrimaryGeneratorMessenger: public G4UImessenger
   G4UIcmdWithAString* primariesfileDirectoryCmd;
   G4UIcmdWithAString* neutrinosfileDirectoryCmd;
   G4UIcmdWithAnInteger* primariesStartEventCmd;
+
+  // For AmBe simulation
+  G4UIcmdWithAString* ambeFileCmd;
+  G4UIcmdWith3VectorAndUnit* ambeOffsetCmd;
   
 };
 
